@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نور الإيمان</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&amp;family=Amiri:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Cairo', sans-serif; }
+    .amiri { font-family: 'Amiri', serif; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    @keyframes countdown {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes bead-appear {
+      0% { opacity: 0; transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes bead-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+      50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.2); }
+    }
+    
+    .page-transition { animation: fadeInUp 0.6s ease-out forwards; }
+    .card-hover { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15); }
+    
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #d4af37, #8b7355); border-radius: 4px; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a] text-white overflow-auto">
+  <div id="app" class="h-full w-full flex flex-col">
+   <!-- Login/Register Section -->
+   <div id="auth-section" class="min-h-screen flex items-center justify-center p-4 page-transition">
+    <div class="max-w-md w-full">
+     <div class="text-center mb-12">
+      <div class="text-6xl mb-4">
+       🕌
+      </div>
+      <h1 id="app-title" class="text-4xl font-bold amiri mb-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] bg-clip-text text-transparent">نور الإيمان</h1>
+      <p class="text-[#a0aec0] text-sm">منصتك الروحانية للقرب من الله</p>
+     </div><!-- Login Form -->
+     <div id="login-form" class="space-y-4 mb-6">
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="email" id="login-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="password" id="login-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div><button onclick="loginUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">دخول</button>
+      <p class="text-center text-[#a0aec0] text-xs">ليس لديك حساب؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">إنشاء حساب جديد</button></p>
+     </div><!-- Register Form -->
+     <div id="register-form" class="space-y-4 hidden">
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="text" id="register-name" placeholder="اسمك الكامل" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="email" id="register-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="password" id="register-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
+       <input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      </div><button onclick="registerUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">إنشاء حساب</button>
+      <p class="text-center text-[#a0aec0] text-xs">لديك حساب بالفعل؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">دخول</button></p>
+     </div>
+    </div>
+   </div><!-- Main Dashboard (Hidden Initially) -->
+   <div id="dashboard-section" class="hidden flex-1 flex flex-col h-full">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+       <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-[#0f172a] font-bold text-lg">
+        🕌
+       </div>
+       <div>
+        <h1 class="text-xl font-bold">نور الإيمان</h1>
+        <p id="user-greeting" class="text-xs text-[#a0aec0]">أهلاً وسهلاً</p>
+       </div>
+      </div><button onclick="logoutUser()" class="text-xs bg-[#1a2942] hover:bg-[#2a3952] px-3 py-2 rounded-lg transition-colors">تسجيل الخروج</button>
+     </div>
+    </header><!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+     <div class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Welcome Section -->
+      <div class="mb-12 page-transition">
+       <h2 id="welcome-msg" class="text-3xl amiri font-bold mb-2">أهلاً وسهلاً في رحلتك الروحانية</h2>
+       <p class="text-[#a0aec0]">استكشف أدوات مختلفة للقرب من الله والتطور الروحي</p>
+      </div><!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <div class="text-3xl mb-2">
+         📿
+        </div>
+        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-tasbeeh">
+         0
+        </div>
+        <p class="text-[#a0aec0] text-xs">تسبيح اليوم</p>
+       </div>
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <div class="text-3xl mb-2">
+         🤲
+        </div>
+        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-duas">
+         0
+        </div>
+        <p class="text-[#a0aec0] text-xs">أدعية اليوم</p>
+       </div>
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <div class="text-3xl mb-2">
+         📖
+        </div>
+        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-quran">
+         0
+        </div>
+        <p class="text-[#a0aec0] text-xs">آيات قرآنية</p>
+       </div>
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <div class="text-3xl mb-2">
+         ✨
+        </div>
+        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-streak">
+         0
+        </div>
+        <p class="text-[#a0aec0] text-xs">الانقطاع المتواصل</p>
+       </div>
+      </div><!-- Prayer Times Section - Large -->
+      <div class="mb-12 rounded-3xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover">
+       <div class="flex items-center justify-between mb-6">
+        <h3 class="text-3xl font-bold amiri text-[#d4af37]">مواعيد الصلاة</h3>
+        <div class="text-4xl">
+         ⏰
+        </div>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
+         <p class="text-[#a0aec0] text-sm mb-2">الفجر</p>
+         <p class="text-2xl font-bold text-[#d4af37]" id="fajr-time">05:30</p>
+        </div>
+        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
+         <p class="text-[#a0aec0] text-sm mb-2">الظهر</p>
+         <p class="text-2xl font-bold text-[#d4af37]" id="dhuhr-time">12:45</p>
+        </div>
+        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
+         <p class="text-[#a0aec0] text-sm mb-2">العصر</p>
+         <p class="text-2xl font-bold text-[#d4af37]" id="asr-time">15:30</p>
+        </div>
+        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
+         <p class="text-[#a0aec0] text-sm mb-2">المغرب</p>
+         <p class="text-2xl font-bold text-[#d4af37]" id="maghrib-time">18:15</p>
+        </div>
+        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
+         <p class="text-[#a0aec0] text-sm mb-2">العشاء</p>
+         <p class="text-2xl font-bold text-[#d4af37]" id="isha-time">19:45</p>
+        </div>
+       </div>
+       <div class="rounded-xl bg-gradient-to-r from-[#d4af37]/20 to-[#8b7355]/20 border border-[#d4af37]/40 p-6 text-center">
+        <p class="text-[#a0aec0] text-sm mb-2">الصلاة القادمة</p>
+        <p id="next-prayer" class="text-2xl font-bold text-[#d4af37]"></p>
+       </div>
+      </div><!-- Main Features Grid -->
+      <h3 class="text-2xl font-bold mb-6 amiri">الأدوات الرئيسية</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+       <!-- Tasbeeh -->
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openTasbeeh()">
+        <div class="text-5xl mb-4">
+         📿
+        </div>
+        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">المسبحة الإلكترونية</h4>
+        <p class="text-[#a0aec0] text-sm mb-4">سبح واذكر الله مع عداد ذكي يتابع تقدمك</p>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>استكشف الآن</span> <span>←</span>
+        </div>
+       </div><!-- Duas & Adhkar -->
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openDuas()">
+        <div class="text-5xl mb-4">
+         🤲
+        </div>
+        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">الأدعية والأذكار</h4>
+        <p class="text-[#a0aec0] text-sm mb-4">أدعية مأثورة من السنة لجميع أحوالك</p>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>تصفح</span> <span>←</span>
+        </div>
+       </div><!-- Quran -->
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openQuran()">
+        <div class="text-5xl mb-4">
+         📖
+        </div>
+        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">القرآن الكريم</h4>
+        <p class="text-[#a0aec0] text-sm mb-4">آيات قرآنية مختارة للتدبر والتفكر</p>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اقرأ</span> <span>←</span>
+        </div>
+       </div><!-- Names of Allah -->
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openNames()">
+        <div class="text-5xl mb-4">
+         ✨
+        </div>
+        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">أسماء الله الحسنى</h4>
+        <p class="text-[#a0aec0] text-sm mb-4">تعرف على الأسماء الـ 99 وفضائلها</p>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اكتشف</span> <span>←</span>
+        </div>
+       </div><!-- Ramadan -->
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openRamadan()">
+        <div class="text-5xl mb-4">
+         🌙
+        </div>
+        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">رمضان الكريم</h4>
+        <p class="text-[#a0aec0] text-sm mb-4">دليلك الكامل لشهر الخير والبركة</p>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اقرأ</span> <span>←</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div><!-- Tasbeeh Modal -->
+   <div id="tasbeeh-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">المسبحة الإلكترونية</h2><button onclick="closeTasbeeh()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto flex items-center justify-center p-4">
+     <div class="w-full max-w-md">
+      <div class="flex flex-col items-center gap-8">
+       <!-- Beads Display -->
+       <div class="w-72 h-72 rounded-full border-8 border-[#d4af37]/40 flex items-center justify-center relative" id="tasbeeh-beads" style="background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));">
+        <div class="absolute inset-0 rounded-full" style="background: conic-gradient(from 0deg, transparent, rgba(212, 175, 55, 0.15), transparent 25%);"></div>
+        <div class="text-center z-10">
+         <div class="text-6xl font-bold amiri text-[#d4af37] mb-4" id="tasbeeh-phrase">
+          الله أكبر
+         </div>
+         <div class="text-7xl font-bold text-[#f4e5b0]" id="tasbeeh-counter">
+          0
+         </div>
+        </div>
+       </div><!-- Counter Info -->
+       <div class="text-center mb-4">
+        <p class="text-[#a0aec0] text-sm mb-2">المجموع</p>
+        <p class="text-3xl font-bold text-[#d4af37]" id="total-tasbeeh">0</p>
+       </div><!-- Control Buttons -->
+       <div class="space-y-3 w-full">
+        <button onclick="incrementTasbeeh()" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold text-xl hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">اضغط للتسبيح</button>
+        <div class="flex gap-3">
+         <button onclick="incrementTasbeeh(10)" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] hover:border-[#d4af37] transition">+10</button> <button onclick="resetTasbeeh()" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#a0aec0]/50 text-[#a0aec0] font-bold hover:bg-[#2a3952] hover:border-[#a0aec0] transition">إعادة تعيين</button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Duas Modal -->
+   <div id="duas-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">الأدعية والأذكار</h2><button onclick="closeDuas()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-4xl mx-auto px-4 py-8">
+      <div class="space-y-6">
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء الصباح</p>
+        <p class="text-[#a0aec0] text-lg">اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء المساء</p>
+        <p class="text-[#a0aec0] text-lg">اللهم إني أسألك العافية في الدنيا والآخرة، اللهم إني أسألك العفو والعافية في ديني ودنياي وأهلي ومالي</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">التسبيح</p>
+        <p class="text-[#a0aec0] text-lg">سبحان الله وبحمده، سبحان الله العظيم</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">التكبير</p>
+        <p class="text-[#a0aec0] text-lg">الله أكبر كبيراً، والحمد لله كثيراً، وسبحان الله بكرة وأصيلاً</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء الاستيقاظ</p>
+        <p class="text-[#a0aec0] text-lg">الحمد لله الذي أحيانا بعد ما أماتنا وإليه النشور</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Quran Modal -->
+   <div id="quran-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">القرآن الكريم</h2><button onclick="closeQuran()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-4xl mx-auto px-4 py-8">
+      <div class="space-y-6">
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الفاتحة</p>
+        <p class="text-[#a0aec0] text-lg amiri">الحمد لله رب العالمين الرحمن الرحيم مالك يوم الدين إياك نعبد وإياك نستعين اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الإخلاص</p>
+        <p class="text-[#a0aec0] text-lg amiri">قل هو الله أحد الله الصمد لم يلد ولم يولد ولم يكن له كفوا أحد</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">آية الكرسي</p>
+        <p class="text-[#a0aec0] text-lg amiri">الله لا إله إلا هو الحي القيوم لا تأخذه سنة ولا نوم له ما في السماوات وما في الأرض من ذا الذي يشفع عنده إلا بإذنه يعلم ما بين أيديهم وما خلفهم</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الأعلى</p>
+        <p class="text-[#a0aec0] text-lg amiri">سبح اسم ربك الأعلى الذي خلق فسوى والذي قدر فهدى والذي أخرج الرعى فجعله غثاء أحوى</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Names of Allah - Full Page Modal -->
+   <div id="names-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">أسماء الله الحسنى</h2><button onclick="closeNames()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="names-grid"><!-- Names will be loaded here -->
+      </div>
+     </div>
+    </div>
+   </div><!-- Ramadan Modal -->
+   <div id="ramadan-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">رمضان الكريم</h2><button onclick="closeRamadan()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-4xl mx-auto px-4 py-8">
+      <div class="space-y-6">
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 text-2xl">فضل الصيام</p>
+        <p class="text-[#a0aec0] text-lg">الصيام جنة من النار، وفيه تتنزل الرحمات وتغفر الذنوب، وتُستجاب الدعوات</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 text-2xl">ليلة القدر</p>
+        <p class="text-[#a0aec0] text-lg">ليلة القدر خير من ألف شهر، وهي من أعظم ليالي السنة، تُرجى في الوتر من العشر الأواخر</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 text-2xl">التراويح</p>
+        <p class="text-[#a0aec0] text-lg">صلاة التراويح من الأعمال المميزة في رمضان، وفيها قراءة القرآن الكريم بكامله</p>
+       </div>
+       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
+        <p class="text-[#d4af37] font-bold mb-3 text-2xl">الدعاء في رمضان</p>
+        <p class="text-[#a0aec0] text-lg">دعاء الصائم مستجاب، خاصة عند الإفطار، فدعاؤك في هذا الوقت لن يُرد</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: 'نور الإيمان',
+      welcome_message: 'أهلاً وسهلاً في رحلتك الروحانية'
+    };
+
+    let config = { ...defaultConfig };
+    let currentUser = null;
+    let tasbeehCount = 0;
+    let users = {};
+
+    // All 99 Names of Allah with meanings
+    const allahNames = [
+      { name: 'الله', meaning: 'الإله المستحق للعبادة' },
+      { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة الشاملة' },
+      { name: 'الرحيم', meaning: 'الرحيم بعباده في الدنيا والآخرة' },
+      { name: 'الملك', meaning: 'المالك الحقيقي الذي بيده الملك' },
+      { name: 'القدوس', meaning: 'المنزه عن النقائص والعيوب' },
+      { name: 'السلام', meaning: 'صاحب السلام والأمان والسلامة' },
+      { name: 'المؤمن', meaning: 'مصدر الأمن والأمان لعباده' },
+      { name: 'العزيز', meaning: 'الغالب المنيع الذي لا يُغلب' },
+      { name: 'الجبار', meaning: 'القاهر الذي لا يُرد أمره' },
+      { name: 'المتكبر', meaning: 'الذي له التعظيم والكبرياء' },
+      { name: 'الخالق', meaning: 'الذي أوجد جميع الأشياء من العدم' },
+      { name: 'البارئ', meaning: 'الذي برأ ونسب كل شيء إلى صورته' },
+      { name: 'المصور', meaning: 'الذي صور جميع المخلوقات بقدرته' },
+      { name: 'الغفار', meaning: 'الذي يغفر الذنوب لمن يشاء' },
+      { name: 'القهار', meaning: 'الذي يقهر أعداءه وخلقه بقدرته' },
+      { name: 'الوهاب', meaning: 'الكريم الذي يهب العطايا بسخاء' },
+      { name: 'الرزاق', meaning: 'الذي يرزق جميع المخلوقات' },
+      { name: 'الفتاح', meaning: 'الذي يفتح باب التوفيق والحكم' },
+      { name: 'العليم', meaning: 'الذي علمه محيط بكل شيء' },
+      { name: 'القابض', meaning: 'الذي يقبض وينقص الأرزاق' },
+      { name: 'الباسط', meaning: 'الذي يبسط ويوسع الأرزاق' },
+      { name: 'الخافض', meaning: 'الذي يخفض الدرجات والأسعار' },
+      { name: 'الرافع', meaning: 'الذي يرفع الدرجات والأقدار' },
+      { name: 'المعز', meaning: 'الذي يعطي العزة والقوة' },
+      { name: 'المذل', meaning: 'الذي يذل من يشاء بقدرته' },
+      { name: 'السميع', meaning: 'الذي يسمع كل الأصوات والأدعية' },
+      { name: 'البصير', meaning: 'الذي يرى كل الأشياء والأعمال' },
+      { name: 'الحكم', meaning: 'الذي يحكم بينخلقه بالعدل' },
+      { name: 'العدل', meaning: 'الذي يعدل في حكمه وقضاؤه' },
+      { name: 'اللطيف', meaning: 'الذي يتودد بلطفه إلى عباده' },
+      { name: 'الخبير', meaning: 'الذي خبرته محيطة بكل شيء' },
+      { name: 'الحليم', meaning: 'الذي يحتمل أذى عباده بحلم' },
+      { name: 'العظيم', meaning: 'الذي عظمته تملأ السماوات والأرض' },
+      { name: 'الغفور', meaning: 'الذي يغفر كثرة الذنوب والآثام' },
+      { name: 'الشكور', meaning: 'الذي يشكر القليل من العمل' },
+      { name: 'العلي', meaning: 'الذي علو درجاته فوق جميع الدرجات' },
+      { name: 'الكبير', meaning: 'الذي كبرياؤه وعظمته لا حدود لهما' },
+      { name: 'الحفيظ', meaning: 'الذي يحفظ السماوات والأرض وما فيهما' },
+      { name: 'المقيت', meaning: 'الذي يقيت كل مخلوق بما يحتاجه' },
+      { name: 'الحسيب', meaning: 'الذي يكفي عباده بحسابه وعدله' },
+      { name: 'الجليل', meaning: 'الذي له الجلال والعظمة والهيبة' },
+      { name: 'الكريم', meaning: 'الكريم الذي لا ينفذ عطاؤه' },
+      { name: 'الرقيب', meaning: 'الذي يراقب أعمال عباده' },
+      { name: 'المجيب', meaning: 'الذي يجيب دعاء الداعين' },
+      { name: 'الواسع', meaning: 'الذي رحمته وعلمه وسع كل شيء' },
+      { name: 'الحكيم', meaning: 'الذي أحكم صنعته وتقديره' },
+      { name: 'الودود', meaning: 'الذي يحب عباده الصالحين ويودهم' },
+      { name: 'المجيد', meaning: 'الذي له المجد والرفعة والعلو' },
+      { name: 'الباعث', meaning: 'الذي يبعث الخلق يوم القيامة' },
+      { name: 'الشهيد', meaning: 'الذي هو شاهد على كل شيء' },
+      { name: 'الحق', meaning: 'الحق الدائم الذي لا يزول أبداً' },
+      { name: 'الوكيل', meaning: 'الذي يتكل عليه عباده في أمورهم' },
+      { name: 'القوي', meaning: 'الذي قوته لا تُضاهى وتملأ الكون' },
+      { name: 'المتين', meaning: 'الذي متانته وقوته لا تُحصى' },
+      { name: 'الولي', meaning: 'الذي يتولى أمور عباده الصالحين' },
+      { name: 'الحميد', meaning: 'الذي يُستحق أن يُحمد على كل حال' },
+      { name: 'المحصي', meaning: 'الذي أحصى كل شيء علماً وكتاباً' },
+      { name: 'المبدئ', meaning: 'الذي يبدئ الخلق ويعيده' },
+      { name: 'المعيد', meaning: 'الذي يعيد الخلق بعد فنائهم' },
+      { name: 'المحيي', meaning: 'الذي يحيي الموتى ويحيي الأرض' },
+      { name: 'المميت', meaning: 'الذي يميت الأحياء بقدرته' },
+      { name: 'الحي', meaning: 'الحي الذي لا يموت الباقي' },
+      { name: 'القيوم', meaning: 'الذي قام بنفسه واستغنى عن غيره' },
+      { name: 'الواجد', meaning: 'الذي يجد كل ما يطلبه ولا يفتقد' },
+      { name: 'الماجد', meaning: 'الذي له المجد والعز والرفعة' },
+      { name: 'الواحد', meaning: 'الواحد الذي لا نظير له' },
+      { name: 'الأحد', meaning: 'الأحد الذي لم يلد ولم يولد' },
+      { name: 'الصمد', meaning: 'الصمد الذي يقصده الخلق فيما يحتاجونه' },
+      { name: 'القادر', meaning: 'الذي قدرته على كل شيء محتملة' },
+      { name: 'المقتدر', meaning: 'الذي له القدرة الكاملة المطلقة' },
+      { name: 'المقدم', meaning: 'الذي يقدم ما يشاء ويؤخر ما يشاء' },
+      { name: 'المؤخر', meaning: 'الذي يؤخر ما يشاء من الأمور' },
+      { name: 'الأول', meaning: 'الأول الذي لا شيء قبله' },
+      { name: 'الآخر', meaning: 'الآخر الذي لا شيء بعده' },
+      { name: 'الظاهر', meaning: 'الظاهر الذي ليس فوقه شيء' },
+      { name: 'الباطن', meaning: 'الباطن الذي ليس دونه شيء' },
+      { name: 'الوالي', meaning: 'الذي يلي أمور عباده برحمته' },
+      { name: 'المتعالي', meaning: 'المتعالي الذي تعالى عن كل نقص' },
+      { name: 'البر', meaning: 'الذي يبر عباده برحمته وبره' },
+      { name: 'التواب', meaning: 'الذي يتوب على عباده التائبين' },
+      { name: 'المنتقم', meaning: 'الذي ينتقم من الظالمين' },
+      { name: 'العفو', meaning: 'الذي يعفو عن ذنوب عباده' },
+      { name: 'الرؤوف', meaning: 'الذي له الرأفة بعباده' },
+      { name: 'مالك الملك', meaning: 'الذي له ملك جميع المملكات' },
+      { name: 'ذو الجلال والإكرام', meaning: 'الذي له الجلال والعظمة والإكرام' },
+      { name: 'المقسط', meaning: 'الذي يقسط ويعدل في حكمه' },
+      { name: 'الجامع', meaning: 'الذي يجمع الخلق يوم القيامة' },
+      { name: 'الغني', meaning: 'الذي استغنى عن جميع خلقه' },
+      { name: 'المغني', meaning: 'الذي يُغني من يشاء من عباده' },
+      { name: 'المانع', meaning: 'الذي يمنع عمن يشاء' },
+      { name: 'الضار', meaning: 'الذي يضر من يشاء بقدرته' },
+      { name: 'النافع', meaning: 'الذي ينفع من يشاء برحمته' },
+      { name: 'النور', meaning: 'النور الذي ينير السماوات والأرض' },
+      { name: 'الهادي', meaning: 'الذي يهدي من يشاء إلى دينه' },
+      { name: 'البديع', meaning: 'الذي أبدع الخلق بلا مثال سابق' },
+      { name: 'الباقي', meaning: 'الباقي الذي يبقى بعد فناء خلقه' },
+      { name: 'الوارث', meaning: 'الذي يرث الأرض ومن عليها' },
+      { name: 'الرشيد', meaning: 'الذي رشده حكمته في كل أموره' },
+      { name: 'الصبور', meaning: 'الصبور على معاصي عباده' }
+    ];
+
+    // Auth Functions
+    function toggleAuthForm() {
+      document.getElementById('login-form').classList.toggle('hidden');
+      document.getElementById('register-form').classList.toggle('hidden');
+    }
+
+    function registerUser() {
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirm = document.getElementById('register-confirm').value;
+
+      if (!name || !email || !password || !confirm) {
+        alert('يرجى ملء جميع الحقول');
+        return;
+      }
+
+      if (password !== confirm) {
+        alert('كلمات المرور غير متطابقة');
+        return;
+      }
+
+      if (users[email]) {
+        alert('البريد الإلكتروني مسجل بالفعل');
+        return;
+      }
+
+      users[email] = { name, password };
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('تم إنشاء الحساب بنجاح! الرجاء تسجيل الدخول');
+      toggleAuthForm();
+    }
+
+    function loginUser() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        alert('يرجى ملء البريد والكلمة المرورية');
+        return;
+      }
+
+      users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (!users[email] || users[email].password !== password) {
+        alert('بريد أو كلمة مرور غير صحيحة');
+        return;
+      }
+
+      currentUser = { email, name: users[email].name };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      showDashboard();
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      document.getElementById('auth-section').classList.remove('hidden');
+      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('login-email').value = '';
+      document.getElementById('login-password').value = '';
+      document.getElementById('register-name').value = '';
+      document.getElementById('register-email').value = '';
+      document.getElementById('register-password').value = '';
+      document.getElementById('register-confirm').value = '';
+    }
+
+    function showDashboard() {
+      document.getElementById('auth-section').classList.add('hidden');
+      document.getElementById('dashboard-section').classList.remove('hidden');
+      document.getElementById('user-greeting').textContent = `مرحباً ${currentUser.name}`;
+      updatePrayerCountdown();
+    }
+
+    /* ============================= */
+    /*        نظام مواقيت الصلاة      */
+    /* ============================= */
+
+let prayerTimes = {};
+
+async function loadPrayerTimes() {
+
+  if (!navigator.geolocation) {
+    alert("المتصفح لا يدعم تحديد الموقع");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const res = await fetch(
+      `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`
+    );
+
+    const data = await res.json();
+
+    prayerTimes = {
+      fajr: data.data.timings.Fajr,
+      dhuhr: data.data.timings.Dhuhr,
+      asr: data.data.timings.Asr,
+      maghrib: data.data.timings.Maghrib,
+      isha: data.data.timings.Isha
+    };
+
+    document.getElementById("fajr-time").innerText = prayerTimes.fajr;
+    document.getElementById("dhuhr-time").innerText = prayerTimes.dhuhr;
+    document.getElementById("asr-time").innerText = prayerTimes.asr;
+    document.getElementById("maghrib-time").innerText = prayerTimes.maghrib;
+    document.getElementById("isha-time").innerText = prayerTimes.isha;
+
+  });
+
+}
+
+    let lastAdhan = null;
+
+    /* ============================= */
+    /*        عداد الصلاة القادمة     */
+    /* ============================= */
+
+function updatePrayerCountdown() {
+
+  const now = new Date();
+
+  let nextPrayer = null;
+  let nextTime = null;
+
+  for (let prayer in prayerTimes) {
+
+    const parts = prayerTimes[prayer].split(":");
+
+    const prayerDate = new Date();
+    prayerDate.setHours(parts[0]);
+    prayerDate.setMinutes(parts[1]);
+    prayerDate.setSeconds(0);
+
+    if (prayerDate > now) {
+
+      nextPrayer = prayer;
+      nextTime = prayerDate;
+      break;
+
+    }
+
+  }
+
+  if (!nextPrayer) return;
+
+  const diff = nextTime - now;
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  const names = {
+    fajr: "الفجر",
+    dhuhr: "الظهر",
+    asr: "العصر",
+    maghrib: "المغرب",
+    isha: "العشاء"
+  };
+
+  const el = document.getElementById("next-prayer");
+
+  if (el) {
+    el.innerText =
+      "الصلاة القادمة: " +
+      names[nextPrayer] +
+      " بعد " +
+      hours + ":" +
+      minutes + ":" +
+      seconds;
+  }
+
+}
+    /* ============================= */
+    /*          تشغيل الأذان          */
+    /* ============================= */
+
+    function checkAdhan() {
+
+      const now = new Date();
+
+      const current =
+        now.getHours() +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+      for (let prayer in prayerTimes) {
+
+        if (prayerTimes[prayer] === current && lastAdhan !== prayer) {
+
+          lastAdhan = prayer;
+
+          const audio =
+            document.getElementById("adhan-audio");
+
+          if (audio) audio.play();
+
+     if (Notification.permission === "granted") {
+
+      new Notification("🕌 حان وقت الصلاة", {
+      body: "حان الآن وقت صلاة " + prayer,
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png"
+           });
+
+         }
+
+        }
+
+      }
+
+    }
+
+    // Tasbeeh Functions
+    function openTasbeeh() {
+      tasbeehCount = 0;
+      document.getElementById('tasbeeh-counter').textContent = '0';
+      document.getElementById('total-tasbeeh').textContent = '0';
+      document.getElementById('tasbeeh-phrase').textContent = 'الله أكبر';
+      document.getElementById('tasbeeh-modal').classList.remove('hidden');
+      document.getElementById('tasbeeh-modal').style.display = 'flex';
+    }
+
+    function closeTasbeeh() {
+      document.getElementById('tasbeeh-modal').classList.add('hidden');
+      document.getElementById('tasbeeh-modal').style.display = 'none';
+    }
+
+    function incrementTasbeeh(amount = 1) {
+      tasbeehCount += amount;
+      document.getElementById('tasbeeh-counter').textContent = tasbeehCount;
+      document.getElementById('total-tasbeeh').textContent = tasbeehCount;
+      document.getElementById('stat-tasbeeh').textContent = tasbeehCount;
+      updateTasbeehPhrase();
+    }
+
+    function updateTasbeehPhrase() {
+      const phrases = ['الله أكبر', 'الحمد لله', 'سبحان الله', 'لا إله إلا الله'];
+      const phraseIndex = Math.floor(tasbeehCount / 30) % phrases.length;
+      document.getElementById('tasbeeh-phrase').textContent = phrases[phraseIndex];
+    }
+
+    function resetTasbeeh() {
+      tasbeehCount = 0;
+      document.getElementById('tasbeeh-counter').textContent = '0';
+      document.getElementById('total-tasbeeh').textContent = '0';
+      document.getElementById('tasbeeh-phrase').textContent = 'الله أكبر';
+    }
+
+    // Modal Functions
+    function openDuas() {
+      document.getElementById('duas-modal').classList.remove('hidden');
+      document.getElementById('duas-modal').style.display = 'flex';
+    }
+
+    function closeDuas() {
+      document.getElementById('duas-modal').classList.add('hidden');
+      document.getElementById('duas-modal').style.display = 'none';
+    }
+
+    function openQuran() {
+      document.getElementById('quran-modal').classList.remove('hidden');
+      document.getElementById('quran-modal').style.display = 'flex';
+    }
+
+    function closeQuran() {
+      document.getElementById('quran-modal').classList.add('hidden');
+      document.getElementById('quran-modal').style.display = 'none';
+    }
+
+    function openNames() {
+      const grid = document.getElementById('names-grid');
+      grid.innerHTML = '';
+      allahNames.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover';
+        card.innerHTML = `
+          <p class="text-3xl font-bold amiri text-[#d4af37] mb-3">${name.name}</p>
+          <p class="text-[#a0aec0] text-sm">${name.meaning}</p>
+        `;
+        grid.appendChild(card);
+      });
+      document.getElementById('names-modal').classList.remove('hidden');
+      document.getElementById('names-modal').style.display = 'flex';
+    }
+
+    function closeNames() {
+      document.getElementById('names-modal').classList.add('hidden');
+      document.getElementById('names-modal').style.display = 'none';
+    }
+
+    function openRamadan() {
+      document.getElementById('ramadan-modal').classList.remove('hidden');
+      document.getElementById('ramadan-modal').style.display = 'flex';
+    }
+
+    function closeRamadan() {
+      document.getElementById('ramadan-modal').classList.add('hidden');
+      document.getElementById('ramadan-modal').style.display = 'none';
+    }
+
+    // Config Management
+    async function onConfigChange(newConfig) {
+      Object.assign(config, newConfig);
+      const title = document.getElementById('app-title');
+      if (title) title.textContent = config.app_title || defaultConfig.app_title;
+    }
+
+    const dataHandler = {
+      onDataChanged(data) {
+        // Handle data changes
+      }
+    };
+
+  async function init() {
+
+  loadPrayerTimes();
+
+  users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: (cfg) => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['app_title', cfg.app_title || defaultConfig.app_title],
+            ['welcome_message', cfg.welcome_message || defaultConfig.welcome_message]
+          ])
+        });
+      }
+
+      if (window.dataSdk) {
+        await window.dataSdk.init(dataHandler);
+      }
+
+      // Initialize prayer system
+      Notification.requestPermission();
+      setInterval(updatePrayerCountdown, 1000);
+      setInterval(checkAdhan, 60000);
+
+      if (currentUser) {
+        showDashboard();
+      }
+    }
+
+    init();
+  </script>
+  <audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9daa8552978e5daa',t:'MTc3MzIzMTcwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html> 
