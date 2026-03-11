@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نور الإيمان</title>
+  <title>نور الإيمان - منصة روحانية</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
@@ -12,151 +12,104 @@
     * { font-family: 'Cairo', sans-serif; }
     .amiri { font-family: 'Amiri', serif; }
     
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
-      50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); }
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    
-    @keyframes countdown {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    @keyframes bead-appear {
-      0% { opacity: 0; transform: scale(0); }
-      50% { transform: scale(1.2); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-    
-    @keyframes bead-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-      50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.2); }
-    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes glow { 0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); } 50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    @keyframes chatBounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     
     .page-transition { animation: fadeInUp 0.6s ease-out forwards; }
+    .notification-show { animation: slideDown 0.4s ease-out forwards; }
+    .notification-hide { animation: slideUp 0.4s ease-out forwards; }
     .card-hover { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15); }
+    .chat-bubble-bounce { animation: chatBounce 0.5s ease-in-out; }
     
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #d4af37, #8b7355); border-radius: 4px; }
+    
+    body { box-sizing: border-box; }
+    main { padding-bottom: 80px; }
+    
+    .hidden-file-input { display: none; }
+    .chat-window { max-height: 500px; }
+    .chat-message { word-wrap: break-word; }
   </style>
-  <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a] text-white overflow-auto">
-  <div id="app" class="h-full w-full flex flex-col">
-   <!-- Login/Register Section -->
+  <div id="app" class="h-full w-full flex flex-col"><!-- Chat Widget -->
+   <div id="chat-widget" class="hidden fixed bottom-6 right-6 z-40 flex flex-col">
+    <!-- Chat Button --> <button id="chat-btn" onclick="toggleChatWindow()" class="w-16 h-16 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-2xl shadow-lg hover:shadow-xl transition-all chat-bubble-bounce border-4 border-[#f4e5b0] relative"> <span class="text-2xl">💬</span> <span id="unread-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center hidden">0</span> </button> <!-- Chat Window -->
+    <div id="chat-window" class="hidden absolute bottom-24 right-0 w-80 rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 shadow-2xl flex flex-col">
+     <!-- Header -->
+     <div class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-t-2xl p-4 flex items-center justify-between">
+      <h3 class="font-bold text-lg">الدعم الفني</h3><button onclick="toggleChatWindow()" class="text-xl hover:scale-125 transition">✕</button>
+     </div><!-- Messages Container -->
+     <div id="chat-messages" class="chat-window overflow-y-auto p-4 space-y-3 flex-1 bg-[#0f172a]/50">
+      <div class="text-center mb-4">
+       <p class="text-[#d4af37] font-bold text-sm">أهلاً وسهلاً! 👋</p>
+       <p class="text-[#a0aec0] text-xs mt-1">كيف يمكننا مساعدتك؟</p>
+      </div>
+     </div><!-- Input -->
+     <div class="border-t border-[#d4af37]/20 p-3 flex gap-2">
+      <input type="text" id="chat-input" placeholder="اكتب رسالتك..." class="flex-1 bg-[#1a2942] border border-[#d4af37]/30 rounded-lg px-3 py-2 text-white text-sm text-right focus:outline-none focus:border-[#d4af37] placeholder-[#a0aec0]" onkeypress="if(event.key==='Enter') sendChatMessage()"> <button onclick="sendChatMessage()" class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] px-4 py-2 rounded-lg font-bold text-sm hover:shadow-lg transition">إرسال</button>
+     </div>
+    </div>
+   </div><!-- Auth Section -->
    <div id="auth-section" class="min-h-screen flex items-center justify-center p-4 page-transition">
     <div class="max-w-md w-full">
      <div class="text-center mb-12">
       <div class="text-6xl mb-4">
        🕌
       </div>
-      <h1 id="app-title" class="text-4xl font-bold amiri mb-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] bg-clip-text text-transparent">نور الإيمان</h1>
+      <h1 class="text-4xl font-bold amiri mb-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] bg-clip-text text-transparent">نور الإيمان</h1>
       <p class="text-[#a0aec0] text-sm">منصتك الروحانية للقرب من الله</p>
      </div><!-- Login Form -->
      <div id="login-form" class="space-y-4 mb-6">
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="email" id="login-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="email" id="login-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="password" id="login-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="login-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div><button onclick="loginUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">دخول</button>
       <p class="text-center text-[#a0aec0] text-xs">ليس لديك حساب؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">إنشاء حساب جديد</button></p>
      </div><!-- Register Form -->
      <div id="register-form" class="space-y-4 hidden">
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="text" id="register-name" placeholder="اسمك الكامل" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="text" id="register-name" placeholder="اسمك الكامل" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="email" id="register-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="email" id="register-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="password" id="register-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="register-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4">
-       <input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
+      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
       </div><button onclick="registerUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">إنشاء حساب</button>
       <p class="text-center text-[#a0aec0] text-xs">لديك حساب بالفعل؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">دخول</button></p>
      </div>
     </div>
-   </div><!-- Main Dashboard (Hidden Initially) -->
-   <div id="dashboard-section" class="hidden flex-1 flex flex-col h-full">
-    <!-- Header -->
-    <header class="sticky top-0 z-40 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+   </div><!-- Dashboard -->
+   <div id="dashboard-section" class="hidden flex-1 flex flex-col h-full"><!-- Header -->
+    <header id="main-header" class="sticky top-0 z-40 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl transition-all duration-500">
      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-       <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-[#0f172a] font-bold text-lg">
-        🕌
+       <div id="profile-avatar-header" class="w-12 h-12 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-2xl border-2 border-[#d4af37] shadow-lg">
+        👤
        </div>
        <div>
-        <h1 class="text-xl font-bold">نور الإيمان</h1>
+        <h1 id="header-username" class="text-xl font-bold">اسم المستخدم</h1>
         <p id="user-greeting" class="text-xs text-[#a0aec0]">أهلاً وسهلاً</p>
        </div>
-      </div><button onclick="logoutUser()" class="text-xs bg-[#1a2942] hover:bg-[#2a3952] px-3 py-2 rounded-lg transition-colors">تسجيل الخروج</button>
+      </div>
+      <div class="flex items-center gap-3"><button id="profile-btn" onclick="openProfileSettings()" class="px-6 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold text-sm hover:shadow-lg hover:shadow-[#d4af37]/50 transition">⚙️ الإعدادات</button> <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden px-6 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-800 text-white font-bold text-sm hover:shadow-lg hover:shadow-red-600/50 transition">🛡️ لوحة التحكم</button>
+      </div>
      </div>
     </header><!-- Main Content -->
     <main class="flex-1 overflow-auto">
-     <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Welcome Section -->
+     <div class="max-w-7xl mx-auto px-4 py-8"><!-- Welcome Section -->
       <div class="mb-12 page-transition">
-       <h2 id="welcome-msg" class="text-3xl amiri font-bold mb-2">أهلاً وسهلاً في رحلتك الروحانية</h2>
+       <h2 class="text-3xl amiri font-bold mb-2">أهلاً وسهلاً في رحلتك الروحانية</h2>
        <p class="text-[#a0aec0]">استكشف أدوات مختلفة للقرب من الله والتطور الروحي</p>
-      </div><!-- Quick Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <div class="text-3xl mb-2">
-         📿
-        </div>
-        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-tasbeeh">
-         0
-        </div>
-        <p class="text-[#a0aec0] text-xs">تسبيح اليوم</p>
-       </div>
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <div class="text-3xl mb-2">
-         🤲
-        </div>
-        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-duas">
-         0
-        </div>
-        <p class="text-[#a0aec0] text-xs">أدعية اليوم</p>
-       </div>
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <div class="text-3xl mb-2">
-         📖
-        </div>
-        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-quran">
-         0
-        </div>
-        <p class="text-[#a0aec0] text-xs">آيات قرآنية</p>
-       </div>
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <div class="text-3xl mb-2">
-         ✨
-        </div>
-        <div class="text-2xl font-bold text-[#d4af37] mb-1" id="stat-streak">
-         0
-        </div>
-        <p class="text-[#a0aec0] text-xs">الانقطاع المتواصل</p>
-       </div>
-      </div><!-- Prayer Times Section - Large -->
+      </div><!-- Prayer Times -->
       <div class="mb-12 rounded-3xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover">
        <div class="flex items-center justify-between mb-6">
         <h3 class="text-3xl font-bold amiri text-[#d4af37]">مواعيد الصلاة</h3>
@@ -190,55 +143,22 @@
         <p class="text-[#a0aec0] text-sm mb-2">الصلاة القادمة</p>
         <p id="next-prayer" class="text-2xl font-bold text-[#d4af37]"></p>
        </div>
-      </div><!-- Main Features Grid -->
+      </div><!-- Main Features -->
       <h3 class="text-2xl font-bold mb-6 amiri">الأدوات الرئيسية</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-       <!-- Tasbeeh -->
+      <div id="features-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
        <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openTasbeeh()">
         <div class="text-5xl mb-4">
          📿
         </div>
         <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">المسبحة الإلكترونية</h4>
         <p class="text-[#a0aec0] text-sm mb-4">سبح واذكر الله مع عداد ذكي يتابع تقدمك</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>استكشف الآن</span> <span>←</span>
-        </div>
-       </div><!-- Duas & Adhkar -->
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openDuas()">
-        <div class="text-5xl mb-4">
-         🤲
-        </div>
-        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">الأدعية والأذكار</h4>
-        <p class="text-[#a0aec0] text-sm mb-4">أدعية مأثورة من السنة لجميع أحوالك</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>تصفح</span> <span>←</span>
-        </div>
-       </div><!-- Quran -->
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openQuran()">
-        <div class="text-5xl mb-4">
-         📖
-        </div>
-        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">القرآن الكريم</h4>
-        <p class="text-[#a0aec0] text-sm mb-4">آيات قرآنية مختارة للتدبر والتفكر</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اقرأ</span> <span>←</span>
-        </div>
-       </div><!-- Names of Allah -->
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openNames()">
-        <div class="text-5xl mb-4">
-         ✨
-        </div>
-        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">أسماء الله الحسنى</h4>
-        <p class="text-[#a0aec0] text-sm mb-4">تعرف على الأسماء الـ 99 وفضائلها</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اكتشف</span> <span>←</span>
-        </div>
-       </div><!-- Ramadan -->
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openRamadan()">
-        <div class="text-5xl mb-4">
-         🌙
-        </div>
-        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">رمضان الكريم</h4>
-        <p class="text-[#a0aec0] text-sm mb-4">دليلك الكامل لشهر الخير والبركة</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm"><span>اقرأ</span> <span>←</span>
+        <div class="flex items-center gap-2 text-[#d4af37] text-sm">
+         <span>استكشف الآن</span> <span>←</span>
         </div>
        </div>
+      </div><!-- Footer in content -->
+      <div class="text-center py-12 border-t border-[#d4af37]/20 mt-12">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
       </div>
      </div>
     </main>
@@ -252,8 +172,7 @@
     <div class="flex-1 overflow-auto flex items-center justify-center p-4">
      <div class="w-full max-w-md">
       <div class="flex flex-col items-center gap-8">
-       <!-- Beads Display -->
-       <div class="w-72 h-72 rounded-full border-8 border-[#d4af37]/40 flex items-center justify-center relative" id="tasbeeh-beads" style="background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));">
+       <div class="w-72 h-72 rounded-full border-8 border-[#d4af37]/40 flex items-center justify-center relative" style="background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));">
         <div class="absolute inset-0 rounded-full" style="background: conic-gradient(from 0deg, transparent, rgba(212, 175, 55, 0.15), transparent 25%);"></div>
         <div class="text-center z-10">
          <div class="text-6xl font-bold amiri text-[#d4af37] mb-4" id="tasbeeh-phrase">
@@ -263,18 +182,19 @@
           0
          </div>
         </div>
-       </div><!-- Counter Info -->
+       </div>
        <div class="text-center mb-4">
         <p class="text-[#a0aec0] text-sm mb-2">المجموع</p>
         <p class="text-3xl font-bold text-[#d4af37]" id="total-tasbeeh">0</p>
-       </div><!-- Control Buttons -->
-       <div class="space-y-3 w-full">
-        <button onclick="incrementTasbeeh()" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold text-xl hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">اضغط للتسبيح</button>
-        <div class="flex gap-3">
-         <button onclick="incrementTasbeeh(10)" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] hover:border-[#d4af37] transition">+10</button> <button onclick="resetTasbeeh()" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#a0aec0]/50 text-[#a0aec0] font-bold hover:bg-[#2a3952] hover:border-[#a0aec0] transition">إعادة تعيين</button>
+       </div>
+       <div class="space-y-3 w-full"><button onclick="incrementTasbeeh()" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold text-xl hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">اضغط للتسبيح</button>
+        <div class="flex gap-3"><button onclick="incrementTasbeeh(10)" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] hover:border-[#d4af37] transition">+10</button> <button onclick="resetTasbeeh()" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#a0aec0]/50 text-[#a0aec0] font-bold hover:bg-[#2a3952] hover:border-[#a0aec0] transition">إعادة تعيين</button>
         </div>
        </div>
       </div>
+     </div><!-- Footer -->
+     <div class="text-center py-6 border-t border-[#d4af37]/20 mt-auto">
+      <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
      </div>
     </div>
    </div><!-- Duas Modal -->
@@ -286,27 +206,9 @@
     </div>
     <div class="flex-1 overflow-auto">
      <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6">
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء الصباح</p>
-        <p class="text-[#a0aec0] text-lg">اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء المساء</p>
-        <p class="text-[#a0aec0] text-lg">اللهم إني أسألك العافية في الدنيا والآخرة، اللهم إني أسألك العفو والعافية في ديني ودنياي وأهلي ومالي</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">التسبيح</p>
-        <p class="text-[#a0aec0] text-lg">سبحان الله وبحمده، سبحان الله العظيم</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">التكبير</p>
-        <p class="text-[#a0aec0] text-lg">الله أكبر كبيراً، والحمد لله كثيراً، وسبحان الله بكرة وأصيلاً</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">دعاء الاستيقاظ</p>
-        <p class="text-[#a0aec0] text-lg">الحمد لله الذي أحيانا بعد ما أماتنا وإليه النشور</p>
-       </div>
+      <div class="space-y-6 mb-12" id="duas-container"></div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
       </div>
      </div>
     </div>
@@ -319,27 +221,34 @@
     </div>
     <div class="flex-1 overflow-auto">
      <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6">
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الفاتحة</p>
-        <p class="text-[#a0aec0] text-lg amiri">الحمد لله رب العالمين الرحمن الرحيم مالك يوم الدين إياك نعبد وإياك نستعين اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الإخلاص</p>
-        <p class="text-[#a0aec0] text-lg amiri">قل هو الله أحد الله الصمد لم يلد ولم يولد ولم يكن له كفوا أحد</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">آية الكرسي</p>
-        <p class="text-[#a0aec0] text-lg amiri">الله لا إله إلا هو الحي القيوم لا تأخذه سنة ولا نوم له ما في السماوات وما في الأرض من ذا الذي يشفع عنده إلا بإذنه يعلم ما بين أيديهم وما خلفهم</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">سورة الأعلى</p>
-        <p class="text-[#a0aec0] text-lg amiri">سبح اسم ربك الأعلى الذي خلق فسوى والذي قدر فهدى والذي أخرج الرعى فجعله غثاء أحوى</p>
-       </div>
+      <div class="space-y-6 mb-12" id="quran-container"></div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
       </div>
      </div>
     </div>
-   </div><!-- Names of Allah - Full Page Modal -->
+   </div><!-- Quran Image Modal -->
+   <div id="quran-image-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <div>
+       <h2 id="quran-image-title" class="text-4xl font-bold amiri text-[#d4af37] mb-1">السورة</h2>
+       <p class="text-[#a0aec0] text-sm">صورة السورة الكريمة</p>
+      </div><button onclick="closeQuranImage()" class="text-3xl hover:scale-125 transition-transform">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-4xl mx-auto px-4 py-8">
+      <div id="quran-image" class="space-y-8 mb-12"></div>
+      <div class="flex gap-4 justify-center mb-12">
+       <button onclick="previousSurah()" class="px-8 py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">← السورة السابقة</button> <button onclick="nextSurah()" class="px-8 py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">السورة التالية →</button>
+      </div>
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Names Modal -->
    <div id="names-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
     <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
      <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
@@ -348,7 +257,9 @@
     </div>
     <div class="flex-1 overflow-auto">
      <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="names-grid"><!-- Names will be loaded here -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="names-grid"></div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
       </div>
      </div>
     </div>
@@ -361,141 +272,349 @@
     </div>
     <div class="flex-1 overflow-auto">
      <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6">
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 text-2xl">فضل الصيام</p>
-        <p class="text-[#a0aec0] text-lg">الصيام جنة من النار، وفيه تتنزل الرحمات وتغفر الذنوب، وتُستجاب الدعوات</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 text-2xl">ليلة القدر</p>
-        <p class="text-[#a0aec0] text-lg">ليلة القدر خير من ألف شهر، وهي من أعظم ليالي السنة، تُرجى في الوتر من العشر الأواخر</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 text-2xl">التراويح</p>
-        <p class="text-[#a0aec0] text-lg">صلاة التراويح من الأعمال المميزة في رمضان، وفيها قراءة القرآن الكريم بكامله</p>
-       </div>
-       <div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6">
-        <p class="text-[#d4af37] font-bold mb-3 text-2xl">الدعاء في رمضان</p>
-        <p class="text-[#a0aec0] text-lg">دعاء الصائم مستجاب، خاصة عند الإفطار، فدعاؤك في هذا الوقت لن يُرد</p>
-       </div>
+      <div class="space-y-6 mb-12" id="ramadan-container"></div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
       </div>
+     </div>
+    </div>
+   </div><!-- Hadith Modal -->
+   <div id="hadith-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">الأحاديث النبوية</h2><button onclick="closeHadith()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-4xl mx-auto px-4 py-8">
+      <div class="space-y-6 mb-12" id="hadith-container"></div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Admin Panel Modal -->
+   <div id="admin-panel-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
+    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
+     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">🛡️ لوحة التحكم الإدارية</h2><button onclick="closeAdminPanel()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+    </div>
+    <div class="flex-1 overflow-auto">
+     <div class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Admin Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <p class="text-[#a0aec0] text-sm mb-2">إجمالي المستخدمين</p>
+        <p class="text-4xl font-bold text-[#d4af37]" id="total-users">0</p>
+       </div>
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <p class="text-[#a0aec0] text-sm mb-2">إجمالي الرسائل</p>
+        <p class="text-4xl font-bold text-[#d4af37]" id="total-messages">0</p>
+       </div>
+       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
+        <p class="text-[#a0aec0] text-sm mb-2">رسائل جديدة</p>
+        <p class="text-4xl font-bold text-red-500" id="unread-messages">0</p>
+       </div>
+      </div><!-- Admin Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+       <button onclick="sendGlobalNotification()" class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover hover:border-[#d4af37] transition text-left">
+        <div class="text-4xl mb-4">
+         📢
+        </div><h3 class="text-2xl font-bold text-[#d4af37] mb-2">إرسال إشعار عام</h3><p class="text-[#a0aec0]">أرسل إشعاراً لجميع المستخدمين</p></button> <button onclick="testAdhan()" class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover hover:border-[#d4af37] transition text-left">
+        <div class="text-4xl mb-4">
+         📻
+        </div><h3 class="text-2xl font-bold text-[#d4af37] mb-2">تجربة الأذان</h3><p class="text-[#a0aec0]">قم بتجربة صوت الأذان</p></button>
+      </div><!-- Messages Section -->
+      <h3 class="text-2xl font-bold mb-6 amiri text-[#d4af37]">الرسائل والاستفسارات</h3>
+      <div id="admin-messages-list" class="space-y-4 mb-12">
+       <p class="text-[#a0aec0] text-center py-4">لا توجد رسائل</p>
+      </div><!-- Footer -->
+      <div class="text-center py-6 border-t border-[#d4af37]/20">
+       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Profile Settings Modal -->
+   <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+    <div class="max-w-2xl w-full rounded-3xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8 page-transition max-h-[90vh] overflow-auto">
+     <div class="flex items-center justify-between mb-8">
+      <h2 class="text-4xl font-bold amiri text-[#d4af37]">إعدادات الحساب</h2><button onclick="closeProfileSettings()" class="text-3xl hover:scale-125 transition">✕</button>
+     </div>
+     <div class="space-y-8">
+      <!-- Profile Avatar Section -->
+      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
+       <p class="text-[#d4af37] font-bold mb-4 text-lg">صورة الملف الشخصي</p>
+       <div class="flex items-center justify-center gap-6 mb-6">
+        <div id="profile-avatar" class="w-24 h-24 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-5xl border-4 border-[#d4af37] shadow-lg overflow-hidden">
+         <img id="profile-avatar-img" src="" class="hidden w-full h-full object-cover"> <span id="profile-avatar-emoji">👤</span>
+        </div>
+       </div><input type="file" id="profile-image-input" class="hidden-file-input" accept="image/*" onchange="handleProfileImageUpload(event)">
+       <div class="flex gap-2 mb-4">
+        <button onclick="document.getElementById('profile-image-input').click()" class="flex-1 py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">📸 رفع صورة</button> <button onclick="resetProfileAvatar()" class="flex-1 py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إعادة تعيين</button>
+       </div>
+       <div class="grid grid-cols-5 gap-3">
+        <button onclick="changeProfileAvatar('👤')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">👤</button> <button onclick="changeProfileAvatar('😊')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">😊</button> <button onclick="changeProfileAvatar('🙏')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">🙏</button> <button onclick="changeProfileAvatar('⭐')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">⭐</button> <button onclick="changeProfileAvatar('🌟')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">🌟</button>
+       </div>
+      </div><!-- Account Info -->
+      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
+       <p class="text-[#d4af37] font-bold mb-4 text-lg">معلومات الحساب</p>
+       <div class="space-y-4">
+        <div class="flex justify-between items-center p-4 bg-[#1a2942]/60 rounded-lg">
+         <span class="text-[#a0aec0]">البريد الإلكتروني:</span> <span id="account-email" class="text-[#d4af37] font-bold">-</span>
+        </div>
+        <div class="flex justify-between items-center p-4 bg-[#1a2942]/60 rounded-lg">
+         <span class="text-[#a0aec0]">إجمالي النقاط:</span> <span id="account-total-coins" class="text-[#f4e5b0] font-bold text-lg">0 💰</span>
+        </div>
+       </div>
+      </div><!-- Update Username -->
+      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
+       <p class="text-[#d4af37] font-bold mb-4 text-lg">تعديل الاسم</p>
+       <div class="space-y-3">
+        <input type="text" id="new-name-input" placeholder="اسمك الجديد" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <button onclick="updateUsername()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">تحديث الاسم</button>
+       </div>
+      </div><!-- Update Password -->
+      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
+       <p class="text-[#d4af37] font-bold mb-4 text-lg">تغيير كلمة المرور</p>
+       <div class="space-y-3">
+        <input type="password" id="old-password-input" placeholder="كلمة المرور القديمة" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <input type="password" id="confirm-password-input" placeholder="تأكيد كلمة المرور" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <button onclick="updatePassword()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">تحديث كلمة المرور</button>
+       </div>
+      </div><!-- Premium Section -->
+      <div id="premium-section" class="bg-gradient-to-br from-[#d4af37]/20 to-[#8b7355]/20 rounded-2xl border-2 border-[#d4af37]/50 p-6">
+       <p class="text-[#d4af37] font-bold mb-4 text-lg">النسخة البريميوم ✨</p>
+       <div class="bg-[#0f172a]/60 rounded-lg p-4 mb-4">
+        <p id="premium-status" class="text-[#a0aec0] mb-2">الحالة: <span class="text-[#d4af37] font-bold">غير مفعّل</span></p>
+        <p class="text-[#a0aec0] text-sm">استمتع بجميع المميزات الحصرية مجاناً!</p>
+       </div><button id="premium-activate-btn" onclick="activatePremiumFromSettings()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">👑 تفعيل البريميوم</button> <button id="premium-active-indicator" class="hidden w-full py-3 rounded-lg bg-gradient-to-r from-[#22c55e] to-[#16a34a] text-white font-bold text-center">✓ البريميوم مفعّل</button>
+      </div><!-- Logout --> <button onclick="logoutFromSettings()" class="w-full py-3 rounded-lg bg-red-900/50 border border-red-600/50 text-red-400 font-bold hover:bg-red-900/70 hover:border-red-600 transition">تسجيل الخروج</button>
      </div>
     </div>
    </div>
   </div>
   <script>
-    const defaultConfig = {
-      app_title: 'نور الإيمان',
-      welcome_message: 'أهلاً وسهلاً في رحلتك الروحانية'
-    };
-
-    let config = { ...defaultConfig };
     let currentUser = null;
-    let tasbeehCount = 0;
     let users = {};
+    let userData = {};
+    let allMessages = [];
+    let isAdminView = false;
 
-    // All 99 Names of Allah with meanings
+    const hadithData = [
+      { title: 'فضل الدعاء', content: 'قال رسول الله صلى الله عليه وسلم: "الدعاء هو العبادة". وقال: "لا يغني حذر من قدر والدعاء ينفع مما نزل ومما لم ينزل" (رواه الترمذي)' },
+      { title: 'الصبر', content: 'قال رسول الله صلى الله عليه وسلم: "ما أُعطي أحد عطاءً خيراً وأوسع من الصبر". وقال: "عجباً لأمر المؤمن إن أمره كله خير وتلك خصيصة للمؤمن"' },
+      { title: 'الرحمة', content: 'قال رسول الله صلى الله عليه وسلم: "الراحمون يرحمهم الرحمن تعالى، ارحموا من في الأرض يرحمكم من في السماء" (رواه الترمذي)' },
+      { title: 'العلم والعمل', content: 'قال رسول الله صلى الله عليه وسلم: "من يُرد الله به خيراً يفقهه في الدين". وقال: "المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف"' },
+      { title: 'الإخلاص', content: 'قال رسول الله صلى الله عليه وسلم: "إنما الأعمال بالنيات وإنما لكل امرئ ما نوى". وقال: "نِيَّتك أعظم من عملك"' },
+      { title: 'الزكاة والصدقة', content: 'قال رسول الله صلى الله عليه وسلم: "من أصبح منكم آمناً في سربه، معافى في بدنه، عنده قوت يومه، فقد حيزت له الدنيا"' },
+      { title: 'حسن الخلق', content: 'قال رسول الله صلى الله عليه وسلم: "ما من شيء أثقل في الميزان من حسن الخلق". وقال: "أقربكم مني مجلساً يوم القيامة أحاسنكم أخلاقاً"' },
+      { title: 'الود والمحبة', content: 'قال رسول الله صلى الله عليه وسلم: "لا تحقرن من المعروف شيئاً". وقال: "من أحب لأخيه ما يحب لنفسه فقد كمل إيمانه"' },
+      { title: 'العفو والمسامحة', content: 'قال رسول الله صلى الله عليه وسلم: "من كظم غيظاً وهو قادر على أن ينفذه دعاه الله على رؤوس الخلائق يوم القيامة"' },
+      { title: 'الصدق', content: 'قال رسول الله صلى الله عليه وسلم: "الصدق يهدي إلى البر والبر يهدي إلى الجنة، وما يزال الرجل يصدق حتى يكتب عند الله صديقاً"' },
+      { title: 'التواضع', content: 'قال رسول الله صلى الله عليه وسلم: "ما تواضع أحد لله إلا رفعه الله". وقال: "بحسب امرئ من الشر أن يحقر أخاه المسلم"' },
+      { title: 'الدعاء المستجاب', content: 'قال رسول الله صلى الله عليه وسلم: "دعاء الصائم لا يُرد"، و"ثلاثة دعواتهم لا ترد: دعاء الصائم، دعاء المسافر، دعاء المظلوم"' }
+    ];
+
+    const duas = [
+      { title: 'دعاء الصباح', text: 'اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور' },
+      { title: 'دعاء المساء', text: 'اللهم إني أسألك العافية في الدنيا والآخرة، اللهم إني أسألك العفو والعافية في ديني ودنياي وأهلي ومالي' },
+      { title: 'التسبيح', text: 'سبحان الله وبحمده، سبحان الله العظيم' },
+      { title: 'التكبير', text: 'الله أكبر كبيراً، والحمد لله كثيراً، وسبحان الله بكرة وأصيلاً' },
+      { title: 'دعاء الاستيقاظ', text: 'الحمد لله الذي أحيانا بعد ما أماتنا وإليه النشور' },
+      { title: 'دعاء الدخول للمنزل', text: 'بسم الله ولجنا وبسم الله خرجنا وعلى الله ربنا توكلنا' },
+      { title: 'دعاء النوم', text: 'اللهم باسمك أموت وأحيا' },
+      { title: 'دعاء الخوف', text: 'لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير' }
+    ];
+
+    const ramadanInfo = [
+      { title: 'فضل الصيام', text: 'الصيام جنة من النار، وفيه تتنزل الرحمات وتغفر الذنوب، وتُستجاب الدعوات. قال رسول الله صلى الله عليه وسلم: "من صام رمضان إيماناً واحتساباً غفر له ما تقدم من ذنبه"' },
+      { title: 'ليلة القدر', text: 'ليلة القدر خير من ألف شهر، وهي من أعظم ليالي السنة، تُرجى في الوتر من العشر الأواخر. قال تعالى: "ليلة القدر خير من ألف شهر"' },
+      { title: 'التراويح', text: 'صلاة التراويح من الأعمال المميزة في رمضان، وفيها قراءة القرآن الكريم بكامله. يُستحب حضورها والمداومة عليها' },
+      { title: 'الدعاء في رمضان', text: 'دعاء الصائم مستجاب، خاصة عند الإفطار، فدعاؤك في هذا الوقت لن يُرد. قال رسول الله: "ثلاثة دعواتهم لا ترد: دعاء الصائم"' },
+      { title: 'الاعتكاف', text: 'الاعتكاف في المسجد من العبادات المستحبة في رمضان، خاصة في العشر الأواخر، لتحصيل ليلة القدر' }
+    ];
+
     const allahNames = [
       { name: 'الله', meaning: 'الإله المستحق للعبادة' },
       { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة الشاملة' },
       { name: 'الرحيم', meaning: 'الرحيم بعباده في الدنيا والآخرة' },
       { name: 'الملك', meaning: 'المالك الحقيقي الذي بيده الملك' },
-      { name: 'القدوس', meaning: 'المنزه عن النقائص والعيوب' },
-      { name: 'السلام', meaning: 'صاحب السلام والأمان والسلامة' },
-      { name: 'المؤمن', meaning: 'مصدر الأمن والأمان لعباده' },
-      { name: 'العزيز', meaning: 'الغالب المنيع الذي لا يُغلب' },
-      { name: 'الجبار', meaning: 'القاهر الذي لا يُرد أمره' },
-      { name: 'المتكبر', meaning: 'الذي له التعظيم والكبرياء' },
-      { name: 'الخالق', meaning: 'الذي أوجد جميع الأشياء من العدم' },
-      { name: 'البارئ', meaning: 'الذي برأ ونسب كل شيء إلى صورته' },
-      { name: 'المصور', meaning: 'الذي صور جميع المخلوقات بقدرته' },
-      { name: 'الغفار', meaning: 'الذي يغفر الذنوب لمن يشاء' },
-      { name: 'القهار', meaning: 'الذي يقهر أعداءه وخلقه بقدرته' },
-      { name: 'الوهاب', meaning: 'الكريم الذي يهب العطايا بسخاء' },
-      { name: 'الرزاق', meaning: 'الذي يرزق جميع المخلوقات' },
-      { name: 'الفتاح', meaning: 'الذي يفتح باب التوفيق والحكم' },
-      { name: 'العليم', meaning: 'الذي علمه محيط بكل شيء' },
-      { name: 'القابض', meaning: 'الذي يقبض وينقص الأرزاق' },
-      { name: 'الباسط', meaning: 'الذي يبسط ويوسع الأرزاق' },
-      { name: 'الخافض', meaning: 'الذي يخفض الدرجات والأسعار' },
-      { name: 'الرافع', meaning: 'الذي يرفع الدرجات والأقدار' },
-      { name: 'المعز', meaning: 'الذي يعطي العزة والقوة' },
-      { name: 'المذل', meaning: 'الذي يذل من يشاء بقدرته' },
-      { name: 'السميع', meaning: 'الذي يسمع كل الأصوات والأدعية' },
-      { name: 'البصير', meaning: 'الذي يرى كل الأشياء والأعمال' },
-      { name: 'الحكم', meaning: 'الذي يحكم بينخلقه بالعدل' },
-      { name: 'العدل', meaning: 'الذي يعدل في حكمه وقضاؤه' },
-      { name: 'اللطيف', meaning: 'الذي يتودد بلطفه إلى عباده' },
-      { name: 'الخبير', meaning: 'الذي خبرته محيطة بكل شيء' },
-      { name: 'الحليم', meaning: 'الذي يحتمل أذى عباده بحلم' },
-      { name: 'العظيم', meaning: 'الذي عظمته تملأ السماوات والأرض' },
-      { name: 'الغفور', meaning: 'الذي يغفر كثرة الذنوب والآثام' },
-      { name: 'الشكور', meaning: 'الذي يشكر القليل من العمل' },
-      { name: 'العلي', meaning: 'الذي علو درجاته فوق جميع الدرجات' },
-      { name: 'الكبير', meaning: 'الذي كبرياؤه وعظمته لا حدود لهما' },
-      { name: 'الحفيظ', meaning: 'الذي يحفظ السماوات والأرض وما فيهما' },
-      { name: 'المقيت', meaning: 'الذي يقيت كل مخلوق بما يحتاجه' },
-      { name: 'الحسيب', meaning: 'الذي يكفي عباده بحسابه وعدله' },
-      { name: 'الجليل', meaning: 'الذي له الجلال والعظمة والهيبة' },
-      { name: 'الكريم', meaning: 'الكريم الذي لا ينفذ عطاؤه' },
-      { name: 'الرقيب', meaning: 'الذي يراقب أعمال عباده' },
-      { name: 'المجيب', meaning: 'الذي يجيب دعاء الداعين' },
-      { name: 'الواسع', meaning: 'الذي رحمته وعلمه وسع كل شيء' },
-      { name: 'الحكيم', meaning: 'الذي أحكم صنعته وتقديره' },
-      { name: 'الودود', meaning: 'الذي يحب عباده الصالحين ويودهم' },
-      { name: 'المجيد', meaning: 'الذي له المجد والرفعة والعلو' },
-      { name: 'الباعث', meaning: 'الذي يبعث الخلق يوم القيامة' },
-      { name: 'الشهيد', meaning: 'الذي هو شاهد على كل شيء' },
-      { name: 'الحق', meaning: 'الحق الدائم الذي لا يزول أبداً' },
-      { name: 'الوكيل', meaning: 'الذي يتكل عليه عباده في أمورهم' },
-      { name: 'القوي', meaning: 'الذي قوته لا تُضاهى وتملأ الكون' },
-      { name: 'المتين', meaning: 'الذي متانته وقوته لا تُحصى' },
-      { name: 'الولي', meaning: 'الذي يتولى أمور عباده الصالحين' },
-      { name: 'الحميد', meaning: 'الذي يُستحق أن يُحمد على كل حال' },
-      { name: 'المحصي', meaning: 'الذي أحصى كل شيء علماً وكتاباً' },
-      { name: 'المبدئ', meaning: 'الذي يبدئ الخلق ويعيده' },
-      { name: 'المعيد', meaning: 'الذي يعيد الخلق بعد فنائهم' },
-      { name: 'المحيي', meaning: 'الذي يحيي الموتى ويحيي الأرض' },
-      { name: 'المميت', meaning: 'الذي يميت الأحياء بقدرته' },
-      { name: 'الحي', meaning: 'الحي الذي لا يموت الباقي' },
-      { name: 'القيوم', meaning: 'الذي قام بنفسه واستغنى عن غيره' },
-      { name: 'الواجد', meaning: 'الذي يجد كل ما يطلبه ولا يفتقد' },
-      { name: 'الماجد', meaning: 'الذي له المجد والعز والرفعة' },
-      { name: 'الواحد', meaning: 'الواحد الذي لا نظير له' },
-      { name: 'الأحد', meaning: 'الأحد الذي لم يلد ولم يولد' },
-      { name: 'الصمد', meaning: 'الصمد الذي يقصده الخلق فيما يحتاجونه' },
-      { name: 'القادر', meaning: 'الذي قدرته على كل شيء محتملة' },
-      { name: 'المقتدر', meaning: 'الذي له القدرة الكاملة المطلقة' },
-      { name: 'المقدم', meaning: 'الذي يقدم ما يشاء ويؤخر ما يشاء' },
-      { name: 'المؤخر', meaning: 'الذي يؤخر ما يشاء من الأمور' },
-      { name: 'الأول', meaning: 'الأول الذي لا شيء قبله' },
-      { name: 'الآخر', meaning: 'الآخر الذي لا شيء بعده' },
-      { name: 'الظاهر', meaning: 'الظاهر الذي ليس فوقه شيء' },
-      { name: 'الباطن', meaning: 'الباطن الذي ليس دونه شيء' },
-      { name: 'الوالي', meaning: 'الذي يلي أمور عباده برحمته' },
-      { name: 'المتعالي', meaning: 'المتعالي الذي تعالى عن كل نقص' },
-      { name: 'البر', meaning: 'الذي يبر عباده برحمته وبره' },
-      { name: 'التواب', meaning: 'الذي يتوب على عباده التائبين' },
-      { name: 'المنتقم', meaning: 'الذي ينتقم من الظالمين' },
-      { name: 'العفو', meaning: 'الذي يعفو عن ذنوب عباده' },
-      { name: 'الرؤوف', meaning: 'الذي له الرأفة بعباده' },
-      { name: 'مالك الملك', meaning: 'الذي له ملك جميع المملكات' },
-      { name: 'ذو الجلال والإكرام', meaning: 'الذي له الجلال والعظمة والإكرام' },
-      { name: 'المقسط', meaning: 'الذي يقسط ويعدل في حكمه' },
-      { name: 'الجامع', meaning: 'الذي يجمع الخلق يوم القيامة' },
-      { name: 'الغني', meaning: 'الذي استغنى عن جميع خلقه' },
-      { name: 'المغني', meaning: 'الذي يُغني من يشاء من عباده' },
-      { name: 'المانع', meaning: 'الذي يمنع عمن يشاء' },
-      { name: 'الضار', meaning: 'الذي يضر من يشاء بقدرته' },
-      { name: 'النافع', meaning: 'الذي ينفع من يشاء برحمته' },
-      { name: 'النور', meaning: 'النور الذي ينير السماوات والأرض' },
-      { name: 'الهادي', meaning: 'الذي يهدي من يشاء إلى دينه' },
-      { name: 'البديع', meaning: 'الذي أبدع الخلق بلا مثال سابق' },
-      { name: 'الباقي', meaning: 'الباقي الذي يبقى بعد فناء خلقه' },
-      { name: 'الوارث', meaning: 'الذي يرث الأرض ومن عليها' },
-      { name: 'الرشيد', meaning: 'الذي رشده حكمته في كل أموره' },
-      { name: 'الصبور', meaning: 'الصبور على معاصي عباده' }
+      { name: 'القدوس', meaning: 'المنزه عن النقائص والعيوب' }
     ];
+
+    // Chat Functions
+    function toggleChatWindow() {
+      const chatWindow = document.getElementById('chat-window');
+      chatWindow.classList.toggle('hidden');
+      if (!chatWindow.classList.contains('hidden')) {
+        document.getElementById('chat-input').focus();
+        // Clear unread badge when opening
+        const badge = document.getElementById('unread-badge');
+        if (badge) badge.classList.add('hidden');
+        // Mark messages as read
+        if (window.dataSdk) {
+          allMessages.forEach(async msg => {
+            if (msg.recipientId === currentUser?.email && !msg.read && !msg.isAdminMessage) {
+              msg.read = true;
+              await window.dataSdk.update(msg);
+            }
+          });
+        }
+      }
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const messagesContainer = document.getElementById('chat-messages');
+      
+      // Add user message to UI
+      const userMsgEl = document.createElement('div');
+      userMsgEl.className = 'text-left';
+      userMsgEl.innerHTML = `
+        <div class="text-xs text-[#a0aec0] mb-1">${currentUser.name}</div>
+        <div class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-lg p-3 text-sm chat-message">
+          ${message}
+        </div>
+      `;
+      messagesContainer.appendChild(userMsgEl);
+
+      // Determine recipient
+      const recipient = window.currentChatTarget || (isAdminView ? 'user' : 'admin');
+      
+      // Send to data SDK
+      if (window.dataSdk) {
+        await window.dataSdk.create({
+          senderId: currentUser.email,
+          senderName: currentUser.name,
+          recipientId: recipient,
+          message: message,
+          timestamp: new Date().toISOString(),
+          isAdminMessage: isAdminView,
+          read: false
+        });
+      }
+
+      input.value = '';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function loadChatMessages() {
+      if (!window.dataSdk) return;
+      const messagesContainer = document.getElementById('chat-messages');
+      if (!messagesContainer) return;
+
+      // Load messages from data
+      allMessages.forEach(msg => {
+        if (!document.querySelector(`[data-msg-id="${msg.__backendId}"]`)) {
+          const msgEl = document.createElement('div');
+          msgEl.setAttribute('data-msg-id', msg.__backendId);
+          
+          const isCurrentUser = msg.senderId === currentUser?.email;
+          const className = isCurrentUser ? 'text-left' : 'text-right';
+          const bgClass = isCurrentUser 
+            ? 'bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a]' 
+            : 'bg-[#1a2942]/80 text-[#a0aec0] border border-[#d4af37]/20';
+          
+          msgEl.className = className;
+          msgEl.innerHTML = `
+            <div class="mb-2">
+              <span class="text-xs text-[#a0aec0]">${msg.senderName}</span>
+              <div class="${bgClass} rounded-lg p-3 text-sm chat-message">
+                ${msg.message}
+              </div>
+            </div>
+          `;
+          messagesContainer.appendChild(msgEl);
+        }
+      });
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      updateUnreadBadge();
+    }
+
+    // Image Upload
+    function handleProfileImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        // Create image and crop to circle
+        const img = new Image();
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          const size = Math.min(img.width, img.height);
+          canvas.width = size;
+          canvas.height = size;
+          
+          const ctx = canvas.getContext('2d');
+          
+          // Draw circular mask
+          ctx.beginPath();
+          ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+          ctx.clip();
+          
+          // Draw image centered in circle
+          const x = (size - img.width) / 2;
+          const y = (size - img.height) / 2;
+          ctx.drawImage(img, x, y);
+          
+          const circleImageData = canvas.toDataURL('image/png');
+          userData.profileImage = circleImageData;
+          
+          // Update avatar display
+          const avatar = document.getElementById('profile-avatar');
+          const img2 = document.getElementById('profile-avatar-img');
+          const emoji = document.getElementById('profile-avatar-emoji');
+          
+          if (img2) {
+            img2.src = circleImageData;
+            img2.classList.remove('hidden');
+          }
+          if (emoji) {
+            emoji.classList.add('hidden');
+          }
+
+          await window.dataSdk.update(userData);
+          
+          // Update header avatar
+          const headerAvatar = document.getElementById('profile-avatar-header');
+          if (headerAvatar) {
+            headerAvatar.innerHTML = `<img src="${circleImageData}" class="w-full h-full object-cover rounded-full">`;
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetProfileAvatar() {
+      const img = document.getElementById('profile-avatar-img');
+      const emoji = document.getElementById('profile-avatar-emoji');
+      if (img) {
+        img.src = '';
+        img.classList.add('hidden');
+      }
+      if (emoji) {
+        emoji.classList.remove('hidden');
+        emoji.textContent = '👤';
+      }
+      userData.profileImage = '';
+      window.dataSdk.update(userData);
+    }
+
+    async function changeProfileAvatar(emoji) {
+      userData.profileImage = emoji;
+      const img = document.getElementById('profile-avatar-img');
+      const emojiEl = document.getElementById('profile-avatar-emoji');
+      if (img) img.classList.add('hidden');
+      if (emojiEl) {
+        emojiEl.classList.remove('hidden');
+        emojiEl.textContent = emoji;
+      }
+      await window.dataSdk.update(userData);
+    }
 
     // Auth Functions
     function toggleAuthForm() {
@@ -503,356 +622,594 @@
       document.getElementById('register-form').classList.toggle('hidden');
     }
 
-    function registerUser() {
+    async function registerUser() {
       const name = document.getElementById('register-name').value;
       const email = document.getElementById('register-email').value;
       const password = document.getElementById('register-password').value;
       const confirm = document.getElementById('register-confirm').value;
 
-      if (!name || !email || !password || !confirm) {
-        alert('يرجى ملء جميع الحقول');
-        return;
-      }
+      if (!name || !email || !password || !confirm) return;
+      if (password !== confirm) return;
 
-      if (password !== confirm) {
-        alert('كلمات المرور غير متطابقة');
-        return;
-      }
-
-      if (users[email]) {
-        alert('البريد الإلكتروني مسجل بالفعل');
-        return;
-      }
+      users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (users[email]) return;
 
       users[email] = { name, password };
       localStorage.setItem('users', JSON.stringify(users));
-      alert('تم إنشاء الحساب بنجاح! الرجاء تسجيل الدخول');
-      toggleAuthForm();
+
+      const result = await window.dataSdk.create({
+        email, name, profileImage: '', password, isAdmin: false, role: 'user'
+      });
+      if (result.isOk) toggleAuthForm();
     }
 
-    function loginUser() {
+    async function loginUser() {
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
 
-      if (!email || !password) {
-        alert('يرجى ملء البريد والكلمة المرورية');
+      if (!email || !password) return;
+
+      // Check for admin account
+      if (email.includes('@') && password === '666') {
+        isAdminView = true;
+        currentUser = { email: 'admin', name: 'الإدارة', isAdmin: true };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        localStorage.setItem('isAdmin', 'true');
+        showDashboard();
         return;
       }
 
       users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (!users[email] || users[email].password !== password) return;
 
-      if (!users[email] || users[email].password !== password) {
-        alert('بريد أو كلمة مرور غير صحيحة');
-        return;
-      }
-
-      currentUser = { email, name: users[email].name };
+      currentUser = { email, name: users[email].name, isAdmin: false };
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      localStorage.setItem('isAdmin', 'false');
       showDashboard();
     }
 
     function logoutUser() {
       currentUser = null;
+      isAdminView = false;
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('isAdmin');
       document.getElementById('auth-section').classList.remove('hidden');
       document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('chat-widget').classList.add('hidden');
       document.getElementById('login-email').value = '';
       document.getElementById('login-password').value = '';
-      document.getElementById('register-name').value = '';
-      document.getElementById('register-email').value = '';
-      document.getElementById('register-password').value = '';
-      document.getElementById('register-confirm').value = '';
     }
 
     function showDashboard() {
       document.getElementById('auth-section').classList.add('hidden');
       document.getElementById('dashboard-section').classList.remove('hidden');
+      document.getElementById('chat-widget').classList.remove('hidden');
       document.getElementById('user-greeting').textContent = `مرحباً ${currentUser.name}`;
-      updatePrayerCountdown();
-    }
-
-    /* ============================= */
-    /*        نظام مواقيت الصلاة      */
-    /* ============================= */
-
-let prayerTimes = {};
-
-async function loadPrayerTimes() {
-
-  if (!navigator.geolocation) {
-    alert("المتصفح لا يدعم تحديد الموقع");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(async (position) => {
-
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-
-    const res = await fetch(
-      `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`
-    );
-
-    const data = await res.json();
-
-    prayerTimes = {
-      fajr: data.data.timings.Fajr,
-      dhuhr: data.data.timings.Dhuhr,
-      asr: data.data.timings.Asr,
-      maghrib: data.data.timings.Maghrib,
-      isha: data.data.timings.Isha
-    };
-
-    document.getElementById("fajr-time").innerText = prayerTimes.fajr;
-    document.getElementById("dhuhr-time").innerText = prayerTimes.dhuhr;
-    document.getElementById("asr-time").innerText = prayerTimes.asr;
-    document.getElementById("maghrib-time").innerText = prayerTimes.maghrib;
-    document.getElementById("isha-time").innerText = prayerTimes.isha;
-
-  });
-
-}
-
-    let lastAdhan = null;
-
-    /* ============================= */
-    /*        عداد الصلاة القادمة     */
-    /* ============================= */
-
-function updatePrayerCountdown() {
-
-  const now = new Date();
-
-  let nextPrayer = null;
-  let nextTime = null;
-
-  for (let prayer in prayerTimes) {
-
-    const parts = prayerTimes[prayer].split(":");
-
-    const prayerDate = new Date();
-    prayerDate.setHours(parts[0]);
-    prayerDate.setMinutes(parts[1]);
-    prayerDate.setSeconds(0);
-
-    if (prayerDate > now) {
-
-      nextPrayer = prayer;
-      nextTime = prayerDate;
-      break;
-
-    }
-
-  }
-
-  if (!nextPrayer) return;
-
-  const diff = nextTime - now;
-
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  const names = {
-    fajr: "الفجر",
-    dhuhr: "الظهر",
-    asr: "العصر",
-    maghrib: "المغرب",
-    isha: "العشاء"
-  };
-
-  const el = document.getElementById("next-prayer");
-
-  if (el) {
-    el.innerText =
-      "الصلاة القادمة: " +
-      names[nextPrayer] +
-      " بعد " +
-      hours + ":" +
-      minutes + ":" +
-      seconds;
-  }
-
-}
-    /* ============================= */
-    /*          تشغيل الأذان          */
-    /* ============================= */
-
-    function checkAdhan() {
-
-      const now = new Date();
-
-      const current =
-        now.getHours() +
-        ":" +
-        String(now.getMinutes()).padStart(2, "0");
-
-      for (let prayer in prayerTimes) {
-
-        if (prayerTimes[prayer] === current && lastAdhan !== prayer) {
-
-          lastAdhan = prayer;
-
-          const audio =
-            document.getElementById("adhan-audio");
-
-          if (audio) audio.play();
-
-     if (Notification.permission === "granted") {
-
-      new Notification("🕌 حان وقت الصلاة", {
-      body: "حان الآن وقت صلاة " + prayer,
-      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png"
-           });
-
-         }
-
-        }
-
+      document.getElementById('header-username').textContent = currentUser.name;
+      
+      // Show admin panel button only for admin
+      const adminBtn = document.getElementById('admin-panel-btn');
+      if (isAdminView) {
+        adminBtn.classList.remove('hidden');
+      } else {
+        adminBtn.classList.add('hidden');
       }
-
+      
+      renderFeaturesGrid();
+      loadChatMessages();
     }
 
-    // Tasbeeh Functions
-    function openTasbeeh() {
-      tasbeehCount = 0;
-      document.getElementById('tasbeeh-counter').textContent = '0';
-      document.getElementById('total-tasbeeh').textContent = '0';
-      document.getElementById('tasbeeh-phrase').textContent = 'الله أكبر';
-      document.getElementById('tasbeeh-modal').classList.remove('hidden');
-      document.getElementById('tasbeeh-modal').style.display = 'flex';
+    function renderFeaturesGrid() {
+      const features = [
+        { title: 'الأدعية والأذكار', icon: '🤲', desc: 'أدعية مأثورة من السنة لجميع أحوالك', action: 'openDuas' },
+        { title: 'أسماء الله الحسنى', icon: '👑', desc: 'تعرف على الأسماء الـ 99 وفضائلها', action: 'openNames' },
+        { title: 'رمضان الكريم', icon: '🌙', desc: 'دليلك الكامل لشهر الخير والبركة', action: 'openRamadan' },
+        { title: 'الأحاديث النبوية', icon: '📚', desc: 'أحاديث شريفة من سنة النبي محمد صلى الله عليه وسلم', action: 'openHadith' }
+      ];
+      
+      const grid = document.getElementById('features-grid');
+      if (!grid) return;
+      
+      grid.innerHTML = features.map(f => `
+        <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="${f.action}()">
+          <div class="text-5xl mb-4">${f.icon}</div>
+          <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">${f.title}</h4>
+          <p class="text-[#a0aec0] text-sm mb-4">${f.desc}</p>
+          <div class="flex items-center gap-2 text-[#d4af37] text-sm">
+            <span>استكشف الآن</span> <span>←</span>
+          </div>
+        </div>
+      `).join('');
     }
 
-    function closeTasbeeh() {
-      document.getElementById('tasbeeh-modal').classList.add('hidden');
-      document.getElementById('tasbeeh-modal').style.display = 'none';
+    // Profile Settings
+    function openProfileSettings() {
+      document.getElementById('account-email').textContent = currentUser.email;
+      document.getElementById('new-name-input').value = userData.name || currentUser.name;
+      
+      const avatarDiv = document.getElementById('profile-avatar');
+      if (userData.profileImage && userData.profileImage.startsWith('data:')) {
+        const img = document.getElementById('profile-avatar-img');
+        const emoji = document.getElementById('profile-avatar-emoji');
+        img.src = userData.profileImage;
+        img.classList.remove('hidden');
+        emoji.classList.add('hidden');
+      }
+      
+      document.getElementById('profile-modal').classList.remove('hidden');
     }
 
-    function incrementTasbeeh(amount = 1) {
-      tasbeehCount += amount;
-      document.getElementById('tasbeeh-counter').textContent = tasbeehCount;
-      document.getElementById('total-tasbeeh').textContent = tasbeehCount;
-      document.getElementById('stat-tasbeeh').textContent = tasbeehCount;
-      updateTasbeehPhrase();
+    function closeProfileSettings() {
+      document.getElementById('profile-modal').classList.add('hidden');
     }
 
-    function updateTasbeehPhrase() {
-      const phrases = ['الله أكبر', 'الحمد لله', 'سبحان الله', 'لا إله إلا الله'];
-      const phraseIndex = Math.floor(tasbeehCount / 30) % phrases.length;
-      document.getElementById('tasbeeh-phrase').textContent = phrases[phraseIndex];
+    async function updateUsername() {
+      const newName = document.getElementById('new-name-input').value;
+      if (!newName) return;
+      
+      userData.name = newName;
+      currentUser.name = newName;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (users[currentUser.email]) {
+        users[currentUser.email].name = newName;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+      
+      await window.dataSdk.update(userData);
+      document.getElementById('user-greeting').textContent = `مرحباً ${newName}`;
+      document.getElementById('header-username').textContent = newName;
     }
 
-    function resetTasbeeh() {
-      tasbeehCount = 0;
-      document.getElementById('tasbeeh-counter').textContent = '0';
-      document.getElementById('total-tasbeeh').textContent = '0';
-      document.getElementById('tasbeeh-phrase').textContent = 'الله أكبر';
+    async function updatePassword() {
+      const oldPassword = document.getElementById('old-password-input').value;
+      const newPassword = document.getElementById('new-password-input').value;
+      const confirmPassword = document.getElementById('confirm-password-input').value;
+
+      if (!oldPassword || !newPassword || !confirmPassword) return;
+      if (newPassword !== confirmPassword) return;
+
+      users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (users[currentUser.email].password !== oldPassword) return;
+
+      users[currentUser.email].password = newPassword;
+      localStorage.setItem('users', JSON.stringify(users));
+      userData.password = newPassword;
+      await window.dataSdk.update(userData);
+
+      document.getElementById('old-password-input').value = '';
+      document.getElementById('new-password-input').value = '';
+      document.getElementById('confirm-password-input').value = '';
     }
 
-    // Modal Functions
+    function logoutFromSettings() {
+      logoutUser();
+      closeProfileSettings();
+    }
+
+    // Admin Panel Functions
+    function openAdminPanel() {
+      document.getElementById('admin-panel-modal').classList.remove('hidden');
+      updateAdminPanel();
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('admin-panel-modal').classList.add('hidden');
+    }
+
+    function updateAdminPanel() {
+      if (!isAdminView) return;
+      
+      // Update stats
+      const totalUsers = Object.keys(users).length;
+      const totalMsgs = allMessages.filter(m => m.message).length;
+      const unreadMsgs = allMessages.filter(m => m.recipientId === 'admin' && !m.read).length;
+      
+      document.getElementById('total-users').textContent = totalUsers;
+      document.getElementById('total-messages').textContent = totalMsgs;
+      document.getElementById('unread-messages').textContent = unreadMsgs;
+      
+      // Load messages list
+      const messagesList = document.getElementById('admin-messages-list');
+      if (!messagesList) return;
+      
+      const uniqueSenders = [...new Set(allMessages.filter(m => m.recipientId === 'admin' && m.message).map(m => m.senderId))];
+      
+      if (uniqueSenders.length === 0) {
+        messagesList.innerHTML = '<p class="text-[#a0aec0] text-center py-4">لا توجد رسائل</p>';
+        return;
+      }
+      
+      messagesList.innerHTML = uniqueSenders.map(sender => {
+        const senderMsgs = allMessages.filter(m => m.senderId === sender && m.recipientId === 'admin' && m.message);
+        const lastMsg = senderMsgs[senderMsgs.length - 1];
+        const unread = senderMsgs.filter(m => !m.read).length;
+        
+        return `
+          <div class="bg-[#1a2942]/60 rounded-lg p-4 border border-[#d4af37]/20 cursor-pointer hover:border-[#d4af37] transition" onclick="openAdminChat('${sender}')">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-[#d4af37]">${lastMsg.senderName}</span>
+              ${unread > 0 ? `<span class="bg-red-600 text-white text-xs px-2 py-1 rounded font-bold">${unread}</span>` : ''}
+            </div>
+            <p class="text-[#a0aec0] text-sm truncate">${lastMsg.message}</p>
+            <p class="text-[#a0aec0] text-xs mt-2">${new Date(lastMsg.timestamp).toLocaleString('ar-SA')}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAdminChat(sender) {
+      const chatWindow = document.getElementById('chat-window');
+      const messagesContainer = document.getElementById('chat-messages');
+      const chatInput = document.getElementById('chat-input');
+      
+      // Store current chat target
+      window.currentChatTarget = sender;
+      
+      // Clear previous messages
+      messagesContainer.innerHTML = '';
+      
+      const senderMsgs = allMessages.filter(m => m.message && (m.senderId === sender || (m.recipientId === sender && m.isAdminMessage)));
+      
+      senderMsgs.forEach(msg => {
+        const msgEl = document.createElement('div');
+        const isAdmin = msg.isAdminMessage;
+        const className = isAdmin ? 'text-left' : 'text-right';
+        const bgClass = isAdmin 
+          ? 'bg-gradient-to-r from-red-600 to-red-800 text-white' 
+          : 'bg-[#1a2942]/80 text-[#a0aec0] border border-[#d4af37]/20';
+        
+        msgEl.className = className;
+        msgEl.innerHTML = `
+          <div class="mb-2">
+            <span class="text-xs text-[#a0aec0]">${isAdmin ? 'الإدارة' : msg.senderName}</span>
+            <div class="${bgClass} rounded-lg p-3 text-sm">
+              ${msg.message}
+            </div>
+          </div>
+        `;
+        messagesContainer.appendChild(msgEl);
+      });
+      
+      // Mark as read
+      if (window.dataSdk) {
+        senderMsgs.forEach(async msg => {
+          if (!msg.isAdminMessage && !msg.read) {
+            msg.read = true;
+            await window.dataSdk.update(msg);
+          }
+        });
+      }
+      
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      chatWindow.classList.remove('hidden');
+      chatInput.focus();
+    }
+
+    function sendGlobalNotification() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4';
+      modal.innerHTML = `
+        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
+          <h3 class="text-2xl font-bold text-[#d4af37] mb-4">إرسال إشعار عام</h3>
+          <textarea id="notification-text" placeholder="اكتب رسالة الإشعار..." class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition placeholder-[#a0aec0] h-24 resize-none"></textarea>
+          <div class="flex gap-2 mt-4">
+            <button onclick="this.closest('div').parentElement.remove()" class="flex-1 py-2 rounded-lg bg-[#1a2942] border border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إلغاء</button>
+            <button onclick="sendNotificationToAll()" class="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">إرسال</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      document.getElementById('notification-text').focus();
+    }
+
+    async function sendNotificationToAll() {
+      const text = document.getElementById('notification-text').value.trim();
+      if (!text) return;
+      
+      // Send to all users
+      if (window.dataSdk) {
+        await window.dataSdk.create({
+          senderId: 'admin',
+          senderName: 'الإدارة',
+          recipientId: 'all_users',
+          message: text,
+          timestamp: new Date().toISOString(),
+          isAdminMessage: true,
+          read: false
+        });
+      }
+      
+      const notificationDiv = document.createElement('div');
+      notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-lg p-4 shadow-xl flex items-center gap-3 animate-pulse';
+      notificationDiv.innerHTML = `
+        <span class="text-2xl">✓</span>
+        <div>
+          <p class="font-bold">تم إرسال الإشعار!</p>
+          <p class="text-sm">تم إرسال الإشعار لجميع المستخدمين</p>
+        </div>
+      `;
+      document.body.appendChild(notificationDiv);
+      setTimeout(() => notificationDiv.remove(), 3000);
+      
+      document.querySelector('[onclick*="sendNotificationToAll"]').closest('div').parentElement.remove();
+      updateAdminPanel();
+    }
+
+    function testAdhan() {
+      const notificationDiv = document.createElement('div');
+      notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
+      notificationDiv.innerHTML = `
+        <span class="text-2xl">📻</span>
+        <div>
+          <p class="font-bold">تجربة الأذان</p>
+          <p class="text-sm">صوت الأذان (وضع تجريبي)</p>
+        </div>
+      `;
+      document.body.appendChild(notificationDiv);
+      setTimeout(() => notificationDiv.remove(), 3000);
+    }
+
+    function openSystemSettings() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 overflow-auto';
+      modal.innerHTML = `
+        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
+          <h3 class="text-2xl font-bold text-[#d4af37] mb-6">إعدادات النظام</h3>
+          <div class="space-y-4 mb-6">
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked class="w-4 h-4">
+                <span class="text-[#a0aec0]">تفعيل الإشعارات</span>
+              </label>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked class="w-4 h-4">
+                <span class="text-[#a0aec0]">السماح بالتسجيل الجديد</span>
+              </label>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked class="w-4 h-4">
+                <span class="text-[#a0aec0]">تفعيل الدردشة</span>
+              </label>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm mb-2">نسخة النظام</p>
+              <p class="text-[#d4af37] font-bold">v1.0.0</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="this.closest('div').parentElement.remove()" class="flex-1 py-2 rounded-lg bg-[#1a2942] border border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إغلاق</button>
+            <button onclick="saveSystemSettings(this)" class="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">حفظ</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function saveSystemSettings(btn) {
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
+      notification.innerHTML = `
+        <span class="text-2xl">✓</span>
+        <div>
+          <p class="font-bold">تم حفظ الإعدادات!</p>
+          <p class="text-sm">تم تحديث إعدادات النظام بنجاح</p>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+      btn.closest('div').parentElement.remove();
+    }
+
+    function generateReport() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 overflow-auto';
+      modal.innerHTML = `
+        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
+          <h3 class="text-2xl font-bold text-[#d4af37] mb-6">📊 تقرير الأنشطة</h3>
+          <div class="space-y-4 mb-6 max-h-64 overflow-auto">
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm">إجمالي الزيارات</p>
+              <p class="text-2xl font-bold text-[#d4af37]">${allMessages.length}</p>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm">الرسائل اليوم</p>
+              <p class="text-2xl font-bold text-[#d4af37]">${allMessages.filter(m => new Date(m.timestamp).toDateString() === new Date().toDateString()).length}</p>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm">الرسائل المقروءة</p>
+              <p class="text-2xl font-bold text-green-500">${allMessages.filter(m => m.read).length}</p>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm">الرسائل غير المقروءة</p>
+              <p class="text-2xl font-bold text-red-500">${allMessages.filter(m => !m.read).length}</p>
+            </div>
+            <div class="bg-[#0f172a]/60 rounded-lg p-4">
+              <p class="text-[#a0aec0] text-sm">آخر تحديث</p>
+              <p class="text-[#d4af37] font-bold text-sm">${new Date().toLocaleString('ar-SA')}</p>
+            </div>
+          </div>
+          <button onclick="this.closest('div').parentElement.remove()" class="w-full py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">إغلاق</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function updateUnreadBadge() {
+      if (!currentUser || isAdminView) return;
+      
+      const unreadCount = allMessages.filter(m => 
+        m.recipientId === currentUser.email && !m.read && m.isAdminMessage
+      ).length;
+      
+      const badge = document.getElementById('unread-badge');
+      if (badge) {
+        if (unreadCount > 0) {
+          badge.classList.remove('hidden');
+          badge.textContent = unreadCount;
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    // Modals
     function openDuas() {
+      const container = document.getElementById('duas-container');
+      container.innerHTML = duas.map(dua => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">${dua.title}</p><p class="text-[#a0aec0] text-lg">${dua.text}</p></div>`).join('');
       document.getElementById('duas-modal').classList.remove('hidden');
-      document.getElementById('duas-modal').style.display = 'flex';
     }
 
     function closeDuas() {
       document.getElementById('duas-modal').classList.add('hidden');
-      document.getElementById('duas-modal').style.display = 'none';
-    }
-
-    function openQuran() {
-      document.getElementById('quran-modal').classList.remove('hidden');
-      document.getElementById('quran-modal').style.display = 'flex';
-    }
-
-    function closeQuran() {
-      document.getElementById('quran-modal').classList.add('hidden');
-      document.getElementById('quran-modal').style.display = 'none';
     }
 
     function openNames() {
       const grid = document.getElementById('names-grid');
-      grid.innerHTML = '';
-      allahNames.forEach(name => {
-        const card = document.createElement('div');
-        card.className = 'rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover';
-        card.innerHTML = `
-          <p class="text-3xl font-bold amiri text-[#d4af37] mb-3">${name.name}</p>
-          <p class="text-[#a0aec0] text-sm">${name.meaning}</p>
-        `;
-        grid.appendChild(card);
-      });
+      grid.innerHTML = allahNames.map(name => `<div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover"><p class="text-3xl font-bold amiri text-[#d4af37] mb-3">${name.name}</p><p class="text-[#a0aec0] text-sm">${name.meaning}</p></div>`).join('');
       document.getElementById('names-modal').classList.remove('hidden');
-      document.getElementById('names-modal').style.display = 'flex';
     }
 
     function closeNames() {
       document.getElementById('names-modal').classList.add('hidden');
-      document.getElementById('names-modal').style.display = 'none';
     }
 
     function openRamadan() {
+      const container = document.getElementById('ramadan-container');
+      container.innerHTML = ramadanInfo.map(item => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 text-2xl">${item.title}</p><p class="text-[#a0aec0] text-lg">${item.text}</p></div>`).join('');
       document.getElementById('ramadan-modal').classList.remove('hidden');
-      document.getElementById('ramadan-modal').style.display = 'flex';
     }
 
     function closeRamadan() {
       document.getElementById('ramadan-modal').classList.add('hidden');
-      document.getElementById('ramadan-modal').style.display = 'none';
     }
 
-    // Config Management
-    async function onConfigChange(newConfig) {
-      Object.assign(config, newConfig);
-      const title = document.getElementById('app-title');
-      if (title) title.textContent = config.app_title || defaultConfig.app_title;
+    function openHadith() {
+      const container = document.getElementById('hadith-container');
+      container.innerHTML = hadithData.map(hadith => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 text-2xl">${hadith.title}</p><p class="text-[#a0aec0] text-lg">${hadith.content}</p></div>`).join('');
+      document.getElementById('hadith-modal').classList.remove('hidden');
     }
 
+    function closeHadith() {
+      document.getElementById('hadith-modal').classList.add('hidden');
+    }
+
+    // Data SDK Handler
     const dataHandler = {
       onDataChanged(data) {
-        // Handle data changes
+        if (data && data.length > 0) {
+          // Separate users from messages based on schema
+          const messages = data.filter(item => item.message);
+          const usersData = data.filter(item => item.email && !item.message);
+          
+          if (isAdminView) {
+            // Admin view: collect all messages
+            allMessages = messages;
+            updateAdminPanel();
+          } else {
+            // User view: find current user
+            const user = usersData.find(u => u.email === currentUser?.email);
+            if (user) {
+              userData = user;
+              const avatar = document.getElementById('profile-avatar-header');
+              if (avatar && user.profileImage) {
+                if (user.profileImage.startsWith('data:')) {
+                  avatar.innerHTML = `<img src="${user.profileImage}" class="w-full h-full object-cover rounded-full">`;
+                } else {
+                  avatar.textContent = user.profileImage;
+                }
+              }
+            }
+            // Also collect messages
+            allMessages = messages.filter(item => item.senderId === currentUser?.email || item.recipientId === currentUser?.email);
+            updateUnreadBadge();
+          }
+          loadChatMessages();
+        }
       }
     };
 
-  async function init() {
-
-  loadPrayerTimes();
-
-  users = JSON.parse(localStorage.getItem('users') || '{}');
-
-      if (window.elementSdk) {
-        window.elementSdk.init({
-          defaultConfig,
-          onConfigChange,
-          mapToCapabilities: (cfg) => ({
-            recolorables: [],
-            borderables: [],
-            fontEditable: undefined,
-            fontSizeable: undefined
-          }),
-          mapToEditPanelValues: (cfg) => new Map([
-            ['app_title', cfg.app_title || defaultConfig.app_title],
-            ['welcome_message', cfg.welcome_message || defaultConfig.welcome_message]
-          ])
-        });
-      }
-
+    // Initialize
+    async function init() {
+      users = JSON.parse(localStorage.getItem('users') || '{}');
+      const saved = localStorage.getItem('currentUser');
+      
       if (window.dataSdk) {
         await window.dataSdk.init(dataHandler);
       }
-
-      // Initialize prayer system
-      Notification.requestPermission();
-      setInterval(updatePrayerCountdown, 1000);
-      setInterval(checkAdhan, 60000);
-
-      if (currentUser) {
+      
+      if (saved) {
+        currentUser = JSON.parse(saved);
+        const isAdmin = localStorage.getItem('isAdmin') === 'true' || currentUser.email === 'admin';
+        if (isAdmin) isAdminView = true;
         showDashboard();
+      }
+
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig: {},
+          onConfigChange: () => {},
+          mapToCapabilities: () => ({ recolorables: [], borderables: [], fontEditable: undefined, fontSizeable: undefined }),
+          mapToEditPanelValues: () => new Map()
+        });
       }
     }
 
     init();
-  </script>
-  <audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9daa8552978e5daa',t:'MTc3MzIzMTcwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html> 
+<script>
+function testAdhan() {
+
+  const notificationDiv = document.createElement('div');
+  notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
+
+  notificationDiv.innerHTML = `
+    <span class="text-2xl">📻</span>
+    <div>
+      <p class="font-bold">تجربة الأذان</p>
+      <p class="text-sm">صوت الأذان (وضع تجريبي)</p>
+    </div>
+  `;
+
+  document.body.appendChild(notificationDiv);
+
+  setTimeout(() => {
+    notificationDiv.remove();
+  }, 3000);
+
+  // تشغيل صوت الأذان
+  const audio = document.getElementById("adhan-audio");
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+  }
+
+  // إشعار المتصفح
+  if (Notification.permission === "granted") {
+
+    new Notification("🕌 الأذان الآن", {
+      body: "هذه تجربة للأذان في موقع نور الإيمان",
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png"
+    });
+
+  } else {
+
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+
+        new Notification("🕌 الأذان الآن", {
+          body: "هذه تجربة للأذان في موقع نور الإيمان"
+        });
+
+      }
+    });
+
+  }
+
+}
+</script>
+<audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dac6f69b2775daa',t:'MTc3MzI1MTc4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
