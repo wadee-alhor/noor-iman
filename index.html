@@ -1159,57 +1159,7 @@
     }
 
     init();
-<script>
-function testAdhan() {
-
-  const notificationDiv = document.createElement('div');
-  notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
-
-  notificationDiv.innerHTML = `
-    <span class="text-2xl">📻</span>
-    <div>
-      <p class="font-bold">تجربة الأذان</p>
-      <p class="text-sm">صوت الأذان (وضع تجريبي)</p>
-    </div>
-  `;
-
-  document.body.appendChild(notificationDiv);
-
-  setTimeout(() => {
-    notificationDiv.remove();
-  }, 3000);
-
-  // تشغيل صوت الأذان
-  const audio = document.getElementById("adhan-audio");
-  if (audio) {
-    audio.currentTime = 0;
-    audio.play().catch(()=>{});
-  }
-
-  // إشعار المتصفح
-  if (Notification.permission === "granted") {
-
-    new Notification("🕌 الأذان الآن", {
-      body: "هذه تجربة للأذان في موقع نور الإيمان",
-      icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png"
-    });
-
-  } else {
-
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-
-        new Notification("🕌 الأذان الآن", {
-          body: "هذه تجربة للأذان في موقع نور الإيمان"
-        });
-
-      }
-    });
-
-  }
-
-}
-</script>
-<audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dac6f69b2775daa',t:'MTc3MzI1MTc4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </script>
+  <audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dac965e303b5daa',t:'MTc3MzI1MzM3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
