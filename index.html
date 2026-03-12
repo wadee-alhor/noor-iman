@@ -1,1165 +1,405 @@
 <!doctype html>
-<html lang="ar" dir="rtl" class="h-full">
+<html lang="ar" dir="rtl" class="h-full" style="height: 100%; margin: 0; padding: 0;">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نور الإيمان - منصة روحانية</title>
+  <title>عبسي | الموقع الرسمي</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&amp;family=Amiri:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Cairo', sans-serif; }
-    .amiri { font-family: 'Amiri', serif; }
+    * { font-family: 'Tajawal', sans-serif; box-sizing: border-box; }
     
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes glow { 0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); } 50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
-    @keyframes chatBounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     
-    .page-transition { animation: fadeInUp 0.6s ease-out forwards; }
-    .notification-show { animation: slideDown 0.4s ease-out forwards; }
-    .notification-hide { animation: slideUp 0.4s ease-out forwards; }
-    .card-hover { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15); }
-    .chat-bubble-bounce { animation: chatBounce 0.5s ease-in-out; }
+    #app {
+      width: 100%;
+      height: 100%;
+    }
     
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #d4af37, #8b7355); border-radius: 4px; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1a1410 0%, #2d2416 50%, #1f1812 100%);
+    }
     
-    body { box-sizing: border-box; }
-    main { padding-bottom: 80px; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
     
-    .hidden-file-input { display: none; }
-    .chat-window { max-height: 500px; }
-    .chat-message { word-wrap: break-word; }
+    .glow-text {
+      text-shadow: 0 0 40px rgba(255, 193, 7, 0.5);
+      animation: fadeInGlow 1s ease-in-out;
+    }
+    
+    @keyframes fadeInGlow {
+      from {
+        opacity: 0;
+        text-shadow: 0 0 20px rgba(255, 193, 7, 0.2);
+      }
+      to {
+        opacity: 1;
+        text-shadow: 0 0 40px rgba(255, 193, 7, 0.5);
+      }
+    }
+    
+    .nav-item {
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-item:hover::after,
+    .nav-item.active::after {
+      width: 100%;
+    }
+    
+    .social-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: slideUp 0.6s ease-out backwards;
+    }
+    
+    .social-card:nth-child(1) { animation-delay: 0.1s; }
+    .social-card:nth-child(2) { animation-delay: 0.2s; }
+    .social-card:nth-child(3) { animation-delay: 0.3s; }
+    .social-card:nth-child(4) { animation-delay: 0.4s; }
+    .social-card:nth-child(5) { animation-delay: 0.5s; }
+    .social-card:nth-child(6) { animation-delay: 0.6s; }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .social-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: #f59e0b !important;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 193, 7, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(255, 193, 7, 0.6); }
+    }
+    
+    .pulse-border {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .page-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      height: 100%;
+      width: 100%;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .page-content {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .page-section.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #1a1410;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #f59e0b, #fbbf24);
+      border-radius: 4px;
+    }
   </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a] text-white overflow-auto">
-  <div id="app" class="h-full w-full flex flex-col"><!-- Chat Widget -->
-   <div id="chat-widget" class="hidden fixed bottom-6 right-6 z-40 flex flex-col">
-    <!-- Chat Button --> <button id="chat-btn" onclick="toggleChatWindow()" class="w-16 h-16 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-2xl shadow-lg hover:shadow-xl transition-all chat-bubble-bounce border-4 border-[#f4e5b0] relative"> <span class="text-2xl">💬</span> <span id="unread-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center hidden">0</span> </button> <!-- Chat Window -->
-    <div id="chat-window" class="hidden absolute bottom-24 right-0 w-80 rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 shadow-2xl flex flex-col">
-     <!-- Header -->
-     <div class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-t-2xl p-4 flex items-center justify-between">
-      <h3 class="font-bold text-lg">الدعم الفني</h3><button onclick="toggleChatWindow()" class="text-xl hover:scale-125 transition">✕</button>
-     </div><!-- Messages Container -->
-     <div id="chat-messages" class="chat-window overflow-y-auto p-4 space-y-3 flex-1 bg-[#0f172a]/50">
-      <div class="text-center mb-4">
-       <p class="text-[#d4af37] font-bold text-sm">أهلاً وسهلاً! 👋</p>
-       <p class="text-[#a0aec0] text-xs mt-1">كيف يمكننا مساعدتك؟</p>
-      </div>
-     </div><!-- Input -->
-     <div class="border-t border-[#d4af37]/20 p-3 flex gap-2">
-      <input type="text" id="chat-input" placeholder="اكتب رسالتك..." class="flex-1 bg-[#1a2942] border border-[#d4af37]/30 rounded-lg px-3 py-2 text-white text-sm text-right focus:outline-none focus:border-[#d4af37] placeholder-[#a0aec0]" onkeypress="if(event.key==='Enter') sendChatMessage()"> <button onclick="sendChatMessage()" class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] px-4 py-2 rounded-lg font-bold text-sm hover:shadow-lg transition">إرسال</button>
+ <body class="gradient-bg text-white" style="margin: 0; padding: 0;">
+  <div id="app" class="flex flex-col h-full w-full" style="width: 100%; height: 100%;">
+   <!-- Navigation -->
+   <nav class="glass-card sticky top-0 z-50 px-6 py-4 border-b border-amber-400/20 flex-shrink-0">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-lg font-bold pulse-border overflow-hidden">
+       <img src="https://media.discordapp.net/attachments/1325835895470952499/1481422878993027215/b62800a8-fe11-43d1-a9c6-8f77e42bdefa-fullsize.webp?ex=69b34211&is=69b1f091&hm=dd50d7d9de26479124f89c5fe0fce90eac97a38983037d4ddea1c8a067b55908&=&format=webp" alt="Logo" class="w-full h-full object-cover" loading="lazy" onerror="this.parentElement.textContent='ع';">
+      </div><span id="nav-title" class="text-xl font-bold text-amber-400">عبسي</span>
+     </div>
+     <div class="flex items-center gap-8">
+      <button onclick="showPage('home')" class="nav-item active text-sm font-medium" data-page="home">الرئيسية</button> <button onclick="showPage('social')" class="nav-item text-sm font-medium" data-page="social">التواصل</button> <button onclick="showPage('achievements')" class="nav-item text-sm font-medium" data-page="achievements">الإنجازات</button> <button onclick="showPage('stats')" class="nav-item text-sm font-medium" data-page="stats">
      </div>
     </div>
-   </div><!-- Auth Section -->
-   <div id="auth-section" class="min-h-screen flex items-center justify-center p-4 page-transition">
-    <div class="max-w-md w-full">
-     <div class="text-center mb-12">
-      <div class="text-6xl mb-4">
-       🕌
-      </div>
-      <h1 class="text-4xl font-bold amiri mb-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] bg-clip-text text-transparent">نور الإيمان</h1>
-      <p class="text-[#a0aec0] text-sm">منصتك الروحانية للقرب من الله</p>
-     </div><!-- Login Form -->
-     <div id="login-form" class="space-y-4 mb-6">
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="email" id="login-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="login-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div><button onclick="loginUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">دخول</button>
-      <p class="text-center text-[#a0aec0] text-xs">ليس لديك حساب؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">إنشاء حساب جديد</button></p>
-     </div><!-- Register Form -->
-     <div id="register-form" class="space-y-4 hidden">
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="text" id="register-name" placeholder="اسمك الكامل" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="email" id="register-email" placeholder="بريدك الإلكتروني" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="register-password" placeholder="كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div>
-      <div class="relative rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-4"><input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" class="w-full bg-transparent focus:outline-none text-right text-sm" required>
-      </div><button onclick="registerUser()" class="w-full rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold py-3 text-sm hover:scale-105 transition-transform">إنشاء حساب</button>
-      <p class="text-center text-[#a0aec0] text-xs">لديك حساب بالفعل؟ <button onclick="toggleAuthForm()" class="text-[#d4af37] hover:underline">دخول</button></p>
-     </div>
-    </div>
-   </div><!-- Dashboard -->
-   <div id="dashboard-section" class="hidden flex-1 flex flex-col h-full"><!-- Header -->
-    <header id="main-header" class="sticky top-0 z-40 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl transition-all duration-500">
-     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-       <div id="profile-avatar-header" class="w-12 h-12 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-2xl border-2 border-[#d4af37] shadow-lg">
-        👤
-       </div>
-       <div>
-        <h1 id="header-username" class="text-xl font-bold">اسم المستخدم</h1>
-        <p id="user-greeting" class="text-xs text-[#a0aec0]">أهلاً وسهلاً</p>
-       </div>
-      </div>
-      <div class="flex items-center gap-3"><button id="profile-btn" onclick="openProfileSettings()" class="px-6 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold text-sm hover:shadow-lg hover:shadow-[#d4af37]/50 transition">⚙️ الإعدادات</button> <button id="admin-panel-btn" onclick="openAdminPanel()" class="hidden px-6 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-800 text-white font-bold text-sm hover:shadow-lg hover:shadow-red-600/50 transition">🛡️ لوحة التحكم</button>
-      </div>
-     </div>
-    </header><!-- Main Content -->
-    <main class="flex-1 overflow-auto">
-     <div class="max-w-7xl mx-auto px-4 py-8"><!-- Welcome Section -->
-      <div class="mb-12 page-transition">
-       <h2 class="text-3xl amiri font-bold mb-2">أهلاً وسهلاً في رحلتك الروحانية</h2>
-       <p class="text-[#a0aec0]">استكشف أدوات مختلفة للقرب من الله والتطور الروحي</p>
-      </div><!-- Prayer Times -->
-      <div class="mb-12 rounded-3xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover">
-       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-3xl font-bold amiri text-[#d4af37]">مواعيد الصلاة</h3>
-        <div class="text-4xl">
-         ⏰
+   </nav><!-- Home Page -->
+   <section id="page-home" class="page-section active">
+    <div class="page-content">
+     <div class="flex-1 flex flex-col items-center justify-center px-6 py-12"><!-- Profile Section -->
+      <div class="text-center mb-12">
+       <div class="relative inline-block mb-8">
+        <div class="w-40 h-40 rounded-full bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 p-1 pulse-border flex items-center justify-center overflow-hidden">
+         <img src="https://media.discordapp.net/attachments/1325835895470952499/1481422878993027215/b62800a8-fe11-43d1-a9c6-8f77e42bdefa-fullsize.webp?ex=69b34211&is=69b1f091&hm=dd50d7d9de26479124f89c5fe0fce90eac97a38983037d4ddea1c8a067b55908&=&format=webp" alt="Profile" class="w-full h-full object-cover rounded-full" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #f59e0b, #fbbf24)'; this.alt='صورة شخصية';">
         </div>
        </div>
-       <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
-         <p class="text-[#a0aec0] text-sm mb-2">الفجر</p>
-         <p class="text-2xl font-bold text-[#d4af37]" id="fajr-time">05:30</p>
-        </div>
-        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
-         <p class="text-[#a0aec0] text-sm mb-2">الظهر</p>
-         <p class="text-2xl font-bold text-[#d4af37]" id="dhuhr-time">12:45</p>
-        </div>
-        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
-         <p class="text-[#a0aec0] text-sm mb-2">العصر</p>
-         <p class="text-2xl font-bold text-[#d4af37]" id="asr-time">15:30</p>
-        </div>
-        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
-         <p class="text-[#a0aec0] text-sm mb-2">المغرب</p>
-         <p class="text-2xl font-bold text-[#d4af37]" id="maghrib-time">18:15</p>
-        </div>
-        <div class="rounded-xl bg-[#0f172a]/60 border border-[#d4af37]/30 p-4 text-center">
-         <p class="text-[#a0aec0] text-sm mb-2">العشاء</p>
-         <p class="text-2xl font-bold text-[#d4af37]" id="isha-time">19:45</p>
-        </div>
-       </div>
-       <div class="rounded-xl bg-gradient-to-r from-[#d4af37]/20 to-[#8b7355]/20 border border-[#d4af37]/40 p-6 text-center">
-        <p class="text-[#a0aec0] text-sm mb-2">الصلاة القادمة</p>
-        <p id="next-prayer" class="text-2xl font-bold text-[#d4af37]"></p>
-       </div>
-      </div><!-- Main Features -->
-      <h3 class="text-2xl font-bold mb-6 amiri">الأدوات الرئيسية</h3>
-      <div id="features-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="openTasbeeh()">
-        <div class="text-5xl mb-4">
-         📿
-        </div>
-        <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">المسبحة الإلكترونية</h4>
-        <p class="text-[#a0aec0] text-sm mb-4">سبح واذكر الله مع عداد ذكي يتابع تقدمك</p>
-        <div class="flex items-center gap-2 text-[#d4af37] text-sm">
-         <span>استكشف الآن</span> <span>←</span>
-        </div>
-       </div>
-      </div><!-- Footer in content -->
-      <div class="text-center py-12 border-t border-[#d4af37]/20 mt-12">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </main>
-   </div><!-- Tasbeeh Modal -->
-   <div id="tasbeeh-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">المسبحة الإلكترونية</h2><button onclick="closeTasbeeh()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto flex items-center justify-center p-4">
-     <div class="w-full max-w-md">
-      <div class="flex flex-col items-center gap-8">
-       <div class="w-72 h-72 rounded-full border-8 border-[#d4af37]/40 flex items-center justify-center relative" style="background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));">
-        <div class="absolute inset-0 rounded-full" style="background: conic-gradient(from 0deg, transparent, rgba(212, 175, 55, 0.15), transparent 25%);"></div>
-        <div class="text-center z-10">
-         <div class="text-6xl font-bold amiri text-[#d4af37] mb-4" id="tasbeeh-phrase">
-          الله أكبر
+       <h1 id="main-title" class="text-5xl font-black mb-4 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent glow-text">عبسي</h1>
+      </div><!-- Action Buttons -->
+      <div class="flex gap-4 mb-12"><button onclick="showPage('social')" class="px-8 py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 rounded-full font-bold text-base hover:opacity-90 transition-all hover:scale-105 shadow-lg">تواصل معي</button> <button onclick="showPage('achievements')" class="px-8 py-3 glass-card rounded-full font-bold text-base hover:bg-white/10 transition-all border border-amber-400/30">شاهد أعمالي</button>
+      </div><!-- Developer Message -->
+      <div class="glass-card rounded-2xl p-8 max-w-2xl w-full border border-blue-400/20 relative overflow-hidden hover:border-blue-300/50 transition-all duration-300">
+       <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 rounded-2xl"></div>
+       <div class="relative z-10">
+        <div class="flex items-center gap-3 mb-5">
+         <div class="text-3xl">
+          💙
          </div>
-         <div class="text-7xl font-bold text-[#f4e5b0]" id="tasbeeh-counter">
-          0
+         <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-300 to-indigo-400 bg-clip-text text-transparent">رسالة من المطور</h3>
+        </div>
+        <p class="text-gray-200 leading-relaxed text-base"><span class="text-blue-400 font-bold"></span> <span class="text-amber-400 font-bold"></span>مرحبا بك السيد عبسي تم انشاء الموقع من متابعك وديع ان شاء الله يعجبك
+       </div>
+      </div>
+     </div> 
+     <footer class="glass-card py-6 text-center border-t border-amber-400/20 flex-shrink-0">
+      <p class="text-gray-400">جميع الحقوق محفوظة © 2026 | تصميم وتطوير <span class="text-amber-400 font-bold">وديع</span></p>
+     </footer>
+    </div>
+   </section><!-- Social Media Page -->
+   <section id="page-social" class="page-section">
+    <div class="page-content">
+     <div class="px-6 py-12">
+      <div class="max-w-4xl mx-auto">
+       <h2 class="text-4xl font-black text-center mb-4 bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">تواصل معي</h2>
+       <p class="text-gray-400 text-center mb-12">تابعني على منصات التواصل الاجتماعي</p>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="https://www.instagram.com/hanialqablan/" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-pink-500/50"> <img src="https://i.pinimg.com/1200x/7c/8e/45/7c8e45c5af7fbe90573e153b505eb3a5.jpg" alt="Instagram" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #E1306C 0%, #C13584 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">Instagram</h3>
+          <p class="text-gray-400">hanialqablan</p>
+          <p class="text-pink-400 text-sm mt-1">1.7M Follower</p>
+         </div></a> <a href="https://www.tiktok.com/@3absi1999" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-500/50"> <img src="https://i.pinimg.com/1200x/71/a2/81/71a28136fbb96ce05bb763157170ef89.jpg" alt="TikTok" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #000000 0%, #1a1a1a 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">TikTok</h3>
+          <p class="text-gray-400">3absi1999</p>
+          <p class="text-cyan-400 text-sm mt-1">5.2M Follower</p>
+         </div></a> <a href="https://www.youtube.com/@3ABSI2" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-red-500/50"> <img src="https://i.pinimg.com/736x/8e/ee/83/8eee8361b9c7e4fa463b9afbefffe529.jpg" alt="YouTube" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #FF0000 0%, #CC0000 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">YouTube</h3>
+          <p class="text-gray-400">3absi2</p>
+          <p class="text-red-400 text-sm mt-1">548K Follower</p>
+         </div></a> <a href="https://snapchat.com/add/absi_151" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-yellow-500/50"> <img src="https://i.pinimg.com/736x/b0/76/bc/b076bc1af81f6409591b390c1ef2b107.jpg" alt="Snapchat" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #FFFC00 0%, #FFD700 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">Snapchat</h3>
+          <p class="text-gray-400">absi_151</p>
+          <p class="text-yellow-400 text-sm mt-1">1M Follower</p>
+         </div></a> <a href="https://discord.com/invite/3absi" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-indigo-500/50"> <img src="https://i.pinimg.com/1200x/05/e5/50/05e55059d376644caab09ea1ef85700d.jpg" alt="Discord" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #7289DA 0%, #5a76d9 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">Discord</h3>
+          <p class="text-gray-400">absi</p>
+          <p class="text-indigo-400 text-sm mt-1">74K Follower</p>
+         </div></a> <a href="https://kick.com/absi" target="_blank" rel="noopener noreferrer" class="social-card glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-green-500/50"> <img src="https://i.pinimg.com/736x/75/3a/80/753a8026311b908da737fab513be953a.jpg" alt="Kick" class="w-full h-40 object-cover rounded-t-xl" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #10A652 0%, #0D7A3A 100%)';">
+         <div class="p-6">
+          <h3 class="text-xl font-bold">Kick</h3>
+          <p class="text-gray-400">absi</p>
+          <p class="text-green-400 text-sm mt-1">773K Follower</p>
+         </div></a>
+       </div>
+      </div>
+     </div>
+     <footer class="glass-card py-6 text-center border-t border-amber-400/20 flex-shrink-0">
+      <p class="text-gray-400">جميع الحقوق محفوظة © 2026 | تصميم وتطوير <span class="text-amber-400 font-bold">وديع</span></p>
+     </footer>
+    </div>
+   </section><!-- Achievements Page -->
+   <section id="page-achievements" class="page-section">
+    <div class="page-content">
+     <div class="px-6 py-12">
+      <div class="max-w-4xl mx-auto">
+       <h2 class="text-4xl font-black text-center mb-4 bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">إنجازاتي</h2>
+       <p class="text-gray-400 text-center mb-12">مسيرة من النجاح والتميز</p>
+       <div class="space-y-6">
+        <div class="glass-card rounded-2xl overflow-hidden border border-amber-400/20 hover:border-amber-300/50 transition-all duration-300">
+         <div class="h-48 w-full bg-gradient-to-br from-amber-500 to-yellow-600 overflow-hidden">
+          <img src="https://media.discordapp.net/attachments/1325835895470952499/1481456862733013102/image.png?ex=69b361b8&is=69b21038&hm=d5d3e1d88ec2528fa5b36822461b103a001042755a5a835f4f523295901c5f97&=&format=webp&quality=lossless"lt='achievement';">
+         </div>
+         <div class="p-6">
+          <h3 class="text-xl font-bold mb-2"> المركز الاول في منصة الكيك على العالم ل سنة 2025 , 2026 </h3>
+          <p class="text-gray-400"> انه من افضل استريمر منصة الكيك و من اكثر المشاهدات ما شاء الله </p><span class="inline-block mt-3 px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm">انجاز</span>
          </div>
         </div>
+        <div class="glass-card rounded-2xl overflow-hidden border border-amber-400/20 hover:border-amber-300/50 transition-all duration-300">
+         <div class="h-48 w-full bg-gradient-to-br from-cyan-500 to-blue-600 overflow-hidden">
+          <img src= "https://i.pinimg.com/736x/5a/4b/88/5a4b889e0682704fc9fa39f6884f76a0.jpg"alt="500K" class="w-full h-full object-cover" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #06b6d4, #3b82f6)';">
+         </div>
+         <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">💎 500K متابع</h3>
+          <p class="text-gray-400"> جميع حسابات السوشل ميديا فيها اكثر من 500 الف متابع ما شاء الله<h3 class="inline-block mt-3 px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm">انجاز</span>
+         </div>
+        </div>
+     </footer>
+    </div>
+   </section><!-- Stats Page -->
+   <section id="page-stats" class="page-section">
+    <div class="page-content">
+     <div class="px-6 py-12">
+      <div class="max-w-4xl mx-auto">
+       <h2 class="text-4xl font-black text-center mb-4 bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">إحصائياتي</h2>
+       <p class="text-gray-400 text-center mb-12">أرقام تتحدث عن النجاح</p>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="glass-card rounded-2xl p-6 text-center border border-amber-400/20">
+         <div class="text-4xl font-black bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent mb-2">
+          +3M
+         </div>
+         <div class="text-gray-400 text-sm">
+          إجمالي المتابعين
+         </div>
        </div>
-       <div class="text-center mb-4">
-        <p class="text-[#a0aec0] text-sm mb-2">المجموع</p>
-        <p class="text-3xl font-bold text-[#d4af37]" id="total-tasbeeh">0</p>
-       </div>
-       <div class="space-y-3 w-full"><button onclick="incrementTasbeeh()" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold text-xl hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">اضغط للتسبيح</button>
-        <div class="flex gap-3"><button onclick="incrementTasbeeh(10)" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] hover:border-[#d4af37] transition">+10</button> <button onclick="resetTasbeeh()" class="flex-1 py-3 rounded-xl bg-[#1a2942] border-2 border-[#a0aec0]/50 text-[#a0aec0] font-bold hover:bg-[#2a3952] hover:border-[#a0aec0] transition">إعادة تعيين</button>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 border border-amber-400/20">
+         <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span>📊</span> توزيع المتابعين</h3>
+         <div class="space-y-4">
+          <div>
+           <div class="flex justify-between mb-2">
+            <span class="text-gray-400">Instagram</span> <span class="text-amber-400 font-bold">1.7M</span>
+           </div>
+           <div class="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full" style="width: 50%;"></div>
+           </div>
+          </div>
+          <div>
+           <div class="flex justify-between mb-2">
+            <span class="text-gray-400">TikTok</span> <span class="text-yellow-400 font-bold">5.2M</span>
+           </div>
+           <div class="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-yellow-400 to-amber-300 rounded-full" style="width: 30%;"></div>
+           </div>
+          </div>
+          <div>
+           <div class="flex justify-between mb-2">
+            <span class="text-gray-400">YouTube</span> <span class="text-red-400 font-bold">548</span>
+           </div>
+           <div class="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-red-600 to-red-500 rounded-full" style="width: 16%;"></div>
+           </div>
+          </div>
+          <div>
+           <div class="flex justify-between mb-2">
+            <span class="text-gray-400">أخرى</span> <span class="text-amber-400 font-bold">+2M</span>
+           </div>
+           <div class="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full" style="width: 4%;"></div>
+           </div>
+          </div>
+         </div>
+         </div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 md:col-span-2 border border-amber-400/20">
+         <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span>💡</span> المهارات</h3>
+         <div class="flex flex-wrap gap-3">
+          <span class="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium">صناعة المحتوى</span> <span class="px-4 py-2 bg-yellow-500/20 text-yellow-400 rounded-full text-sm font-medium">انشاء بثوث مباشرة</span> <span class="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-medium">لاعب و محترف كونتر </span> <span class="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium">يوجد لديه افضل مدير اعمال السيد حازم </span> <span class="px-4 py-2 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-medium">يوجد لديه افضل تيم غرفة و دسكورد</span> <span class="px-4 py-2 bg-red-500/20 text-red-400 rounded-full text-sm font-medium">افضل لاعب ببجي </span> <span class="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">اوى استريمر في الشرق الاوسطية</span> <span class="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium">البرمجة</span>
+         </div>
         </div>
        </div>
       </div>
-     </div><!-- Footer -->
-     <div class="text-center py-6 border-t border-[#d4af37]/20 mt-auto">
-      <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
      </div>
+     <footer class="glass-card py-6 text-center border-t border-amber-400/20 flex-shrink-0">
+      <p class="text-gray-400">جميع الحقوق محفوظة © 2026 | تصميم وتطوير <span class="text-amber-400 font-bold">وديع</span></p>
+     </footer>
     </div>
-   </div><!-- Duas Modal -->
-   <div id="duas-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">الأدعية والأذكار</h2><button onclick="closeDuas()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6 mb-12" id="duas-container"></div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Quran Modal -->
-   <div id="quran-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">القرآن الكريم</h2><button onclick="closeQuran()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6 mb-12" id="quran-container"></div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Quran Image Modal -->
-   <div id="quran-image-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <div>
-       <h2 id="quran-image-title" class="text-4xl font-bold amiri text-[#d4af37] mb-1">السورة</h2>
-       <p class="text-[#a0aec0] text-sm">صورة السورة الكريمة</p>
-      </div><button onclick="closeQuranImage()" class="text-3xl hover:scale-125 transition-transform">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div id="quran-image" class="space-y-8 mb-12"></div>
-      <div class="flex gap-4 justify-center mb-12">
-       <button onclick="previousSurah()" class="px-8 py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">← السورة السابقة</button> <button onclick="nextSurah()" class="px-8 py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition-all">السورة التالية →</button>
-      </div>
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Names Modal -->
-   <div id="names-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">أسماء الله الحسنى</h2><button onclick="closeNames()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="names-grid"></div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Ramadan Modal -->
-   <div id="ramadan-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">رمضان الكريم</h2><button onclick="closeRamadan()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6 mb-12" id="ramadan-container"></div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Hadith Modal -->
-   <div id="hadith-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">الأحاديث النبوية</h2><button onclick="closeHadith()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="space-y-6 mb-12" id="hadith-container"></div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Admin Panel Modal -->
-   <div id="admin-panel-modal" class="hidden fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1a2942] to-[#0d1b2a]">
-    <div class="sticky top-0 z-50 border-b border-[#d4af37]/20 bg-[#0f172a]/95 backdrop-blur-xl">
-     <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">🛡️ لوحة التحكم الإدارية</h2><button onclick="closeAdminPanel()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-    </div>
-    <div class="flex-1 overflow-auto">
-     <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Admin Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <p class="text-[#a0aec0] text-sm mb-2">إجمالي المستخدمين</p>
-        <p class="text-4xl font-bold text-[#d4af37]" id="total-users">0</p>
-       </div>
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <p class="text-[#a0aec0] text-sm mb-2">إجمالي الرسائل</p>
-        <p class="text-4xl font-bold text-[#d4af37]" id="total-messages">0</p>
-       </div>
-       <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover">
-        <p class="text-[#a0aec0] text-sm mb-2">رسائل جديدة</p>
-        <p class="text-4xl font-bold text-red-500" id="unread-messages">0</p>
-       </div>
-      </div><!-- Admin Actions -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-       <button onclick="sendGlobalNotification()" class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover hover:border-[#d4af37] transition text-left">
-        <div class="text-4xl mb-4">
-         📢
-        </div><h3 class="text-2xl font-bold text-[#d4af37] mb-2">إرسال إشعار عام</h3><p class="text-[#a0aec0]">أرسل إشعاراً لجميع المستخدمين</p></button> <button onclick="testAdhan()" class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover hover:border-[#d4af37] transition text-left">
-        <div class="text-4xl mb-4">
-         📻
-        </div><h3 class="text-2xl font-bold text-[#d4af37] mb-2">تجربة الأذان</h3><p class="text-[#a0aec0]">قم بتجربة صوت الأذان</p></button>
-      </div><!-- Messages Section -->
-      <h3 class="text-2xl font-bold mb-6 amiri text-[#d4af37]">الرسائل والاستفسارات</h3>
-      <div id="admin-messages-list" class="space-y-4 mb-12">
-       <p class="text-[#a0aec0] text-center py-4">لا توجد رسائل</p>
-      </div><!-- Footer -->
-      <div class="text-center py-6 border-t border-[#d4af37]/20">
-       <p class="text-[#a0aec0] text-xs">© حقوق وديع الحر 2026</p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Profile Settings Modal -->
-   <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-    <div class="max-w-2xl w-full rounded-3xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8 page-transition max-h-[90vh] overflow-auto">
-     <div class="flex items-center justify-between mb-8">
-      <h2 class="text-4xl font-bold amiri text-[#d4af37]">إعدادات الحساب</h2><button onclick="closeProfileSettings()" class="text-3xl hover:scale-125 transition">✕</button>
-     </div>
-     <div class="space-y-8">
-      <!-- Profile Avatar Section -->
-      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
-       <p class="text-[#d4af37] font-bold mb-4 text-lg">صورة الملف الشخصي</p>
-       <div class="flex items-center justify-center gap-6 mb-6">
-        <div id="profile-avatar" class="w-24 h-24 rounded-full bg-gradient-to-r from-[#d4af37] to-[#8b7355] flex items-center justify-center text-5xl border-4 border-[#d4af37] shadow-lg overflow-hidden">
-         <img id="profile-avatar-img" src="" class="hidden w-full h-full object-cover"> <span id="profile-avatar-emoji">👤</span>
-        </div>
-       </div><input type="file" id="profile-image-input" class="hidden-file-input" accept="image/*" onchange="handleProfileImageUpload(event)">
-       <div class="flex gap-2 mb-4">
-        <button onclick="document.getElementById('profile-image-input').click()" class="flex-1 py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">📸 رفع صورة</button> <button onclick="resetProfileAvatar()" class="flex-1 py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إعادة تعيين</button>
-       </div>
-       <div class="grid grid-cols-5 gap-3">
-        <button onclick="changeProfileAvatar('👤')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">👤</button> <button onclick="changeProfileAvatar('😊')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">😊</button> <button onclick="changeProfileAvatar('🙏')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">🙏</button> <button onclick="changeProfileAvatar('⭐')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">⭐</button> <button onclick="changeProfileAvatar('🌟')" class="py-3 rounded-lg bg-[#1a2942] border-2 border-[#d4af37]/50 text-3xl hover:bg-[#2a3952] hover:border-[#d4af37] transition">🌟</button>
-       </div>
-      </div><!-- Account Info -->
-      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
-       <p class="text-[#d4af37] font-bold mb-4 text-lg">معلومات الحساب</p>
-       <div class="space-y-4">
-        <div class="flex justify-between items-center p-4 bg-[#1a2942]/60 rounded-lg">
-         <span class="text-[#a0aec0]">البريد الإلكتروني:</span> <span id="account-email" class="text-[#d4af37] font-bold">-</span>
-        </div>
-        <div class="flex justify-between items-center p-4 bg-[#1a2942]/60 rounded-lg">
-         <span class="text-[#a0aec0]">إجمالي النقاط:</span> <span id="account-total-coins" class="text-[#f4e5b0] font-bold text-lg">0 💰</span>
-        </div>
-       </div>
-      </div><!-- Update Username -->
-      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
-       <p class="text-[#d4af37] font-bold mb-4 text-lg">تعديل الاسم</p>
-       <div class="space-y-3">
-        <input type="text" id="new-name-input" placeholder="اسمك الجديد" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <button onclick="updateUsername()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">تحديث الاسم</button>
-       </div>
-      </div><!-- Update Password -->
-      <div class="bg-[#0f172a]/60 rounded-2xl border border-[#d4af37]/20 p-6">
-       <p class="text-[#d4af37] font-bold mb-4 text-lg">تغيير كلمة المرور</p>
-       <div class="space-y-3">
-        <input type="password" id="old-password-input" placeholder="كلمة المرور القديمة" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <input type="password" id="confirm-password-input" placeholder="تأكيد كلمة المرور" class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition"> <button onclick="updatePassword()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">تحديث كلمة المرور</button>
-       </div>
-      </div><!-- Premium Section -->
-      <div id="premium-section" class="bg-gradient-to-br from-[#d4af37]/20 to-[#8b7355]/20 rounded-2xl border-2 border-[#d4af37]/50 p-6">
-       <p class="text-[#d4af37] font-bold mb-4 text-lg">النسخة البريميوم ✨</p>
-       <div class="bg-[#0f172a]/60 rounded-lg p-4 mb-4">
-        <p id="premium-status" class="text-[#a0aec0] mb-2">الحالة: <span class="text-[#d4af37] font-bold">غير مفعّل</span></p>
-        <p class="text-[#a0aec0] text-sm">استمتع بجميع المميزات الحصرية مجاناً!</p>
-       </div><button id="premium-activate-btn" onclick="activatePremiumFromSettings()" class="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#f4e5b0] text-[#0f172a] font-bold hover:shadow-lg hover:shadow-[#d4af37]/50 transition">👑 تفعيل البريميوم</button> <button id="premium-active-indicator" class="hidden w-full py-3 rounded-lg bg-gradient-to-r from-[#22c55e] to-[#16a34a] text-white font-bold text-center">✓ البريميوم مفعّل</button>
-      </div><!-- Logout --> <button onclick="logoutFromSettings()" class="w-full py-3 rounded-lg bg-red-900/50 border border-red-600/50 text-red-400 font-bold hover:bg-red-900/70 hover:border-red-600 transition">تسجيل الخروج</button>
-     </div>
-    </div>
-   </div>
+   </section>
   </div>
   <script>
-    let currentUser = null;
-    let users = {};
-    let userData = {};
-    let allMessages = [];
-    let isAdminView = false;
-
-    const hadithData = [
-      { title: 'فضل الدعاء', content: 'قال رسول الله صلى الله عليه وسلم: "الدعاء هو العبادة". وقال: "لا يغني حذر من قدر والدعاء ينفع مما نزل ومما لم ينزل" (رواه الترمذي)' },
-      { title: 'الصبر', content: 'قال رسول الله صلى الله عليه وسلم: "ما أُعطي أحد عطاءً خيراً وأوسع من الصبر". وقال: "عجباً لأمر المؤمن إن أمره كله خير وتلك خصيصة للمؤمن"' },
-      { title: 'الرحمة', content: 'قال رسول الله صلى الله عليه وسلم: "الراحمون يرحمهم الرحمن تعالى، ارحموا من في الأرض يرحمكم من في السماء" (رواه الترمذي)' },
-      { title: 'العلم والعمل', content: 'قال رسول الله صلى الله عليه وسلم: "من يُرد الله به خيراً يفقهه في الدين". وقال: "المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف"' },
-      { title: 'الإخلاص', content: 'قال رسول الله صلى الله عليه وسلم: "إنما الأعمال بالنيات وإنما لكل امرئ ما نوى". وقال: "نِيَّتك أعظم من عملك"' },
-      { title: 'الزكاة والصدقة', content: 'قال رسول الله صلى الله عليه وسلم: "من أصبح منكم آمناً في سربه، معافى في بدنه، عنده قوت يومه، فقد حيزت له الدنيا"' },
-      { title: 'حسن الخلق', content: 'قال رسول الله صلى الله عليه وسلم: "ما من شيء أثقل في الميزان من حسن الخلق". وقال: "أقربكم مني مجلساً يوم القيامة أحاسنكم أخلاقاً"' },
-      { title: 'الود والمحبة', content: 'قال رسول الله صلى الله عليه وسلم: "لا تحقرن من المعروف شيئاً". وقال: "من أحب لأخيه ما يحب لنفسه فقد كمل إيمانه"' },
-      { title: 'العفو والمسامحة', content: 'قال رسول الله صلى الله عليه وسلم: "من كظم غيظاً وهو قادر على أن ينفذه دعاه الله على رؤوس الخلائق يوم القيامة"' },
-      { title: 'الصدق', content: 'قال رسول الله صلى الله عليه وسلم: "الصدق يهدي إلى البر والبر يهدي إلى الجنة، وما يزال الرجل يصدق حتى يكتب عند الله صديقاً"' },
-      { title: 'التواضع', content: 'قال رسول الله صلى الله عليه وسلم: "ما تواضع أحد لله إلا رفعه الله". وقال: "بحسب امرئ من الشر أن يحقر أخاه المسلم"' },
-      { title: 'الدعاء المستجاب', content: 'قال رسول الله صلى الله عليه وسلم: "دعاء الصائم لا يُرد"، و"ثلاثة دعواتهم لا ترد: دعاء الصائم، دعاء المسافر، دعاء المظلوم"' }
-    ];
-
-    const duas = [
-      { title: 'دعاء الصباح', text: 'اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور' },
-      { title: 'دعاء المساء', text: 'اللهم إني أسألك العافية في الدنيا والآخرة، اللهم إني أسألك العفو والعافية في ديني ودنياي وأهلي ومالي' },
-      { title: 'التسبيح', text: 'سبحان الله وبحمده، سبحان الله العظيم' },
-      { title: 'التكبير', text: 'الله أكبر كبيراً، والحمد لله كثيراً، وسبحان الله بكرة وأصيلاً' },
-      { title: 'دعاء الاستيقاظ', text: 'الحمد لله الذي أحيانا بعد ما أماتنا وإليه النشور' },
-      { title: 'دعاء الدخول للمنزل', text: 'بسم الله ولجنا وبسم الله خرجنا وعلى الله ربنا توكلنا' },
-      { title: 'دعاء النوم', text: 'اللهم باسمك أموت وأحيا' },
-      { title: 'دعاء الخوف', text: 'لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير' }
-    ];
-
-    const ramadanInfo = [
-      { title: 'فضل الصيام', text: 'الصيام جنة من النار، وفيه تتنزل الرحمات وتغفر الذنوب، وتُستجاب الدعوات. قال رسول الله صلى الله عليه وسلم: "من صام رمضان إيماناً واحتساباً غفر له ما تقدم من ذنبه"' },
-      { title: 'ليلة القدر', text: 'ليلة القدر خير من ألف شهر، وهي من أعظم ليالي السنة، تُرجى في الوتر من العشر الأواخر. قال تعالى: "ليلة القدر خير من ألف شهر"' },
-      { title: 'التراويح', text: 'صلاة التراويح من الأعمال المميزة في رمضان، وفيها قراءة القرآن الكريم بكامله. يُستحب حضورها والمداومة عليها' },
-      { title: 'الدعاء في رمضان', text: 'دعاء الصائم مستجاب، خاصة عند الإفطار، فدعاؤك في هذا الوقت لن يُرد. قال رسول الله: "ثلاثة دعواتهم لا ترد: دعاء الصائم"' },
-      { title: 'الاعتكاف', text: 'الاعتكاف في المسجد من العبادات المستحبة في رمضان، خاصة في العشر الأواخر، لتحصيل ليلة القدر' }
-    ];
-
-    const allahNames = [
-      { name: 'الله', meaning: 'الإله المستحق للعبادة' },
-      { name: 'الرحمن', meaning: 'ذو الرحمة الواسعة الشاملة' },
-      { name: 'الرحيم', meaning: 'الرحيم بعباده في الدنيا والآخرة' },
-      { name: 'الملك', meaning: 'المالك الحقيقي الذي بيده الملك' },
-      { name: 'القدوس', meaning: 'المنزه عن النقائص والعيوب' }
-    ];
-
-    // Chat Functions
-    function toggleChatWindow() {
-      const chatWindow = document.getElementById('chat-window');
-      chatWindow.classList.toggle('hidden');
-      if (!chatWindow.classList.contains('hidden')) {
-        document.getElementById('chat-input').focus();
-        // Clear unread badge when opening
-        const badge = document.getElementById('unread-badge');
-        if (badge) badge.classList.add('hidden');
-        // Mark messages as read
-        if (window.dataSdk) {
-          allMessages.forEach(async msg => {
-            if (msg.recipientId === currentUser?.email && !msg.read && !msg.isAdminMessage) {
-              msg.read = true;
-              await window.dataSdk.update(msg);
-            }
-          });
-        }
-      }
-    }
-
-    async function sendChatMessage() {
-      const input = document.getElementById('chat-input');
-      const message = input.value.trim();
-      if (!message) return;
-
-      const messagesContainer = document.getElementById('chat-messages');
-      
-      // Add user message to UI
-      const userMsgEl = document.createElement('div');
-      userMsgEl.className = 'text-left';
-      userMsgEl.innerHTML = `
-        <div class="text-xs text-[#a0aec0] mb-1">${currentUser.name}</div>
-        <div class="bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-lg p-3 text-sm chat-message">
-          ${message}
-        </div>
-      `;
-      messagesContainer.appendChild(userMsgEl);
-
-      // Determine recipient
-      const recipient = window.currentChatTarget || (isAdminView ? 'user' : 'admin');
-      
-      // Send to data SDK
-      if (window.dataSdk) {
-        await window.dataSdk.create({
-          senderId: currentUser.email,
-          senderName: currentUser.name,
-          recipientId: recipient,
-          message: message,
-          timestamp: new Date().toISOString(),
-          isAdminMessage: isAdminView,
-          read: false
-        });
-      }
-
-      input.value = '';
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    function loadChatMessages() {
-      if (!window.dataSdk) return;
-      const messagesContainer = document.getElementById('chat-messages');
-      if (!messagesContainer) return;
-
-      // Load messages from data
-      allMessages.forEach(msg => {
-        if (!document.querySelector(`[data-msg-id="${msg.__backendId}"]`)) {
-          const msgEl = document.createElement('div');
-          msgEl.setAttribute('data-msg-id', msg.__backendId);
-          
-          const isCurrentUser = msg.senderId === currentUser?.email;
-          const className = isCurrentUser ? 'text-left' : 'text-right';
-          const bgClass = isCurrentUser 
-            ? 'bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a]' 
-            : 'bg-[#1a2942]/80 text-[#a0aec0] border border-[#d4af37]/20';
-          
-          msgEl.className = className;
-          msgEl.innerHTML = `
-            <div class="mb-2">
-              <span class="text-xs text-[#a0aec0]">${msg.senderName}</span>
-              <div class="${bgClass} rounded-lg p-3 text-sm chat-message">
-                ${msg.message}
-              </div>
-            </div>
-          `;
-          messagesContainer.appendChild(msgEl);
-        }
-      });
-
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      updateUnreadBadge();
-    }
-
-    // Image Upload
-    function handleProfileImageUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        // Create image and crop to circle
-        const img = new Image();
-        img.onload = async () => {
-          const canvas = document.createElement('canvas');
-          const size = Math.min(img.width, img.height);
-          canvas.width = size;
-          canvas.height = size;
-          
-          const ctx = canvas.getContext('2d');
-          
-          // Draw circular mask
-          ctx.beginPath();
-          ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-          ctx.clip();
-          
-          // Draw image centered in circle
-          const x = (size - img.width) / 2;
-          const y = (size - img.height) / 2;
-          ctx.drawImage(img, x, y);
-          
-          const circleImageData = canvas.toDataURL('image/png');
-          userData.profileImage = circleImageData;
-          
-          // Update avatar display
-          const avatar = document.getElementById('profile-avatar');
-          const img2 = document.getElementById('profile-avatar-img');
-          const emoji = document.getElementById('profile-avatar-emoji');
-          
-          if (img2) {
-            img2.src = circleImageData;
-            img2.classList.remove('hidden');
-          }
-          if (emoji) {
-            emoji.classList.add('hidden');
-          }
-
-          await window.dataSdk.update(userData);
-          
-          // Update header avatar
-          const headerAvatar = document.getElementById('profile-avatar-header');
-          if (headerAvatar) {
-            headerAvatar.innerHTML = `<img src="${circleImageData}" class="w-full h-full object-cover rounded-full">`;
-          }
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function resetProfileAvatar() {
-      const img = document.getElementById('profile-avatar-img');
-      const emoji = document.getElementById('profile-avatar-emoji');
-      if (img) {
-        img.src = '';
-        img.classList.add('hidden');
-      }
-      if (emoji) {
-        emoji.classList.remove('hidden');
-        emoji.textContent = '👤';
-      }
-      userData.profileImage = '';
-      window.dataSdk.update(userData);
-    }
-
-    async function changeProfileAvatar(emoji) {
-      userData.profileImage = emoji;
-      const img = document.getElementById('profile-avatar-img');
-      const emojiEl = document.getElementById('profile-avatar-emoji');
-      if (img) img.classList.add('hidden');
-      if (emojiEl) {
-        emojiEl.classList.remove('hidden');
-        emojiEl.textContent = emoji;
-      }
-      await window.dataSdk.update(userData);
-    }
-
-    // Auth Functions
-    function toggleAuthForm() {
-      document.getElementById('login-form').classList.toggle('hidden');
-      document.getElementById('register-form').classList.toggle('hidden');
-    }
-
-    async function registerUser() {
-      const name = document.getElementById('register-name').value;
-      const email = document.getElementById('register-email').value;
-      const password = document.getElementById('register-password').value;
-      const confirm = document.getElementById('register-confirm').value;
-
-      if (!name || !email || !password || !confirm) return;
-      if (password !== confirm) return;
-
-      users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[email]) return;
-
-      users[email] = { name, password };
-      localStorage.setItem('users', JSON.stringify(users));
-
-      const result = await window.dataSdk.create({
-        email, name, profileImage: '', password, isAdmin: false, role: 'user'
-      });
-      if (result.isOk) toggleAuthForm();
-    }
-
-    async function loginUser() {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-
-      if (!email || !password) return;
-
-      // Check for admin account
-      if (email.includes('@') && password === '666') {
-        isAdminView = true;
-        currentUser = { email: 'admin', name: 'الإدارة', isAdmin: true };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        localStorage.setItem('isAdmin', 'true');
-        showDashboard();
-        return;
-      }
-
-      users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (!users[email] || users[email].password !== password) return;
-
-      currentUser = { email, name: users[email].name, isAdmin: false };
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      localStorage.setItem('isAdmin', 'false');
-      showDashboard();
-    }
-
-    function logoutUser() {
-      currentUser = null;
-      isAdminView = false;
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('isAdmin');
-      document.getElementById('auth-section').classList.remove('hidden');
-      document.getElementById('dashboard-section').classList.add('hidden');
-      document.getElementById('chat-widget').classList.add('hidden');
-      document.getElementById('login-email').value = '';
-      document.getElementById('login-password').value = '';
-    }
-
-    function showDashboard() {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('dashboard-section').classList.remove('hidden');
-      document.getElementById('chat-widget').classList.remove('hidden');
-      document.getElementById('user-greeting').textContent = `مرحباً ${currentUser.name}`;
-      document.getElementById('header-username').textContent = currentUser.name;
-      
-      // Show admin panel button only for admin
-      const adminBtn = document.getElementById('admin-panel-btn');
-      if (isAdminView) {
-        adminBtn.classList.remove('hidden');
-      } else {
-        adminBtn.classList.add('hidden');
-      }
-      
-      renderFeaturesGrid();
-      loadChatMessages();
-    }
-
-    function renderFeaturesGrid() {
-      const features = [
-        { title: 'الأدعية والأذكار', icon: '🤲', desc: 'أدعية مأثورة من السنة لجميع أحوالك', action: 'openDuas' },
-        { title: 'أسماء الله الحسنى', icon: '👑', desc: 'تعرف على الأسماء الـ 99 وفضائلها', action: 'openNames' },
-        { title: 'رمضان الكريم', icon: '🌙', desc: 'دليلك الكامل لشهر الخير والبركة', action: 'openRamadan' },
-        { title: 'الأحاديث النبوية', icon: '📚', desc: 'أحاديث شريفة من سنة النبي محمد صلى الله عليه وسلم', action: 'openHadith' }
-      ];
-      
-      const grid = document.getElementById('features-grid');
-      if (!grid) return;
-      
-      grid.innerHTML = features.map(f => `
-        <div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-8 card-hover cursor-pointer" onclick="${f.action}()">
-          <div class="text-5xl mb-4">${f.icon}</div>
-          <h4 class="text-2xl font-bold mb-2 text-[#d4af37]">${f.title}</h4>
-          <p class="text-[#a0aec0] text-sm mb-4">${f.desc}</p>
-          <div class="flex items-center gap-2 text-[#d4af37] text-sm">
-            <span>استكشف الآن</span> <span>←</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Profile Settings
-    function openProfileSettings() {
-      document.getElementById('account-email').textContent = currentUser.email;
-      document.getElementById('new-name-input').value = userData.name || currentUser.name;
-      
-      const avatarDiv = document.getElementById('profile-avatar');
-      if (userData.profileImage && userData.profileImage.startsWith('data:')) {
-        const img = document.getElementById('profile-avatar-img');
-        const emoji = document.getElementById('profile-avatar-emoji');
-        img.src = userData.profileImage;
-        img.classList.remove('hidden');
-        emoji.classList.add('hidden');
-      }
-      
-      document.getElementById('profile-modal').classList.remove('hidden');
-    }
-
-    function closeProfileSettings() {
-      document.getElementById('profile-modal').classList.add('hidden');
-    }
-
-    async function updateUsername() {
-      const newName = document.getElementById('new-name-input').value;
-      if (!newName) return;
-      
-      userData.name = newName;
-      currentUser.name = newName;
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[currentUser.email]) {
-        users[currentUser.email].name = newName;
-        localStorage.setItem('users', JSON.stringify(users));
-      }
-      
-      await window.dataSdk.update(userData);
-      document.getElementById('user-greeting').textContent = `مرحباً ${newName}`;
-      document.getElementById('header-username').textContent = newName;
-    }
-
-    async function updatePassword() {
-      const oldPassword = document.getElementById('old-password-input').value;
-      const newPassword = document.getElementById('new-password-input').value;
-      const confirmPassword = document.getElementById('confirm-password-input').value;
-
-      if (!oldPassword || !newPassword || !confirmPassword) return;
-      if (newPassword !== confirmPassword) return;
-
-      users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[currentUser.email].password !== oldPassword) return;
-
-      users[currentUser.email].password = newPassword;
-      localStorage.setItem('users', JSON.stringify(users));
-      userData.password = newPassword;
-      await window.dataSdk.update(userData);
-
-      document.getElementById('old-password-input').value = '';
-      document.getElementById('new-password-input').value = '';
-      document.getElementById('confirm-password-input').value = '';
-    }
-
-    function logoutFromSettings() {
-      logoutUser();
-      closeProfileSettings();
-    }
-
-    // Admin Panel Functions
-    function openAdminPanel() {
-      document.getElementById('admin-panel-modal').classList.remove('hidden');
-      updateAdminPanel();
-    }
-
-    function closeAdminPanel() {
-      document.getElementById('admin-panel-modal').classList.add('hidden');
-    }
-
-    function updateAdminPanel() {
-      if (!isAdminView) return;
-      
-      // Update stats
-      const totalUsers = Object.keys(users).length;
-      const totalMsgs = allMessages.filter(m => m.message).length;
-      const unreadMsgs = allMessages.filter(m => m.recipientId === 'admin' && !m.read).length;
-      
-      document.getElementById('total-users').textContent = totalUsers;
-      document.getElementById('total-messages').textContent = totalMsgs;
-      document.getElementById('unread-messages').textContent = unreadMsgs;
-      
-      // Load messages list
-      const messagesList = document.getElementById('admin-messages-list');
-      if (!messagesList) return;
-      
-      const uniqueSenders = [...new Set(allMessages.filter(m => m.recipientId === 'admin' && m.message).map(m => m.senderId))];
-      
-      if (uniqueSenders.length === 0) {
-        messagesList.innerHTML = '<p class="text-[#a0aec0] text-center py-4">لا توجد رسائل</p>';
-        return;
-      }
-      
-      messagesList.innerHTML = uniqueSenders.map(sender => {
-        const senderMsgs = allMessages.filter(m => m.senderId === sender && m.recipientId === 'admin' && m.message);
-        const lastMsg = senderMsgs[senderMsgs.length - 1];
-        const unread = senderMsgs.filter(m => !m.read).length;
-        
-        return `
-          <div class="bg-[#1a2942]/60 rounded-lg p-4 border border-[#d4af37]/20 cursor-pointer hover:border-[#d4af37] transition" onclick="openAdminChat('${sender}')">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-bold text-[#d4af37]">${lastMsg.senderName}</span>
-              ${unread > 0 ? `<span class="bg-red-600 text-white text-xs px-2 py-1 rounded font-bold">${unread}</span>` : ''}
-            </div>
-            <p class="text-[#a0aec0] text-sm truncate">${lastMsg.message}</p>
-            <p class="text-[#a0aec0] text-xs mt-2">${new Date(lastMsg.timestamp).toLocaleString('ar-SA')}</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function openAdminChat(sender) {
-      const chatWindow = document.getElementById('chat-window');
-      const messagesContainer = document.getElementById('chat-messages');
-      const chatInput = document.getElementById('chat-input');
-      
-      // Store current chat target
-      window.currentChatTarget = sender;
-      
-      // Clear previous messages
-      messagesContainer.innerHTML = '';
-      
-      const senderMsgs = allMessages.filter(m => m.message && (m.senderId === sender || (m.recipientId === sender && m.isAdminMessage)));
-      
-      senderMsgs.forEach(msg => {
-        const msgEl = document.createElement('div');
-        const isAdmin = msg.isAdminMessage;
-        const className = isAdmin ? 'text-left' : 'text-right';
-        const bgClass = isAdmin 
-          ? 'bg-gradient-to-r from-red-600 to-red-800 text-white' 
-          : 'bg-[#1a2942]/80 text-[#a0aec0] border border-[#d4af37]/20';
-        
-        msgEl.className = className;
-        msgEl.innerHTML = `
-          <div class="mb-2">
-            <span class="text-xs text-[#a0aec0]">${isAdmin ? 'الإدارة' : msg.senderName}</span>
-            <div class="${bgClass} rounded-lg p-3 text-sm">
-              ${msg.message}
-            </div>
-          </div>
-        `;
-        messagesContainer.appendChild(msgEl);
-      });
-      
-      // Mark as read
-      if (window.dataSdk) {
-        senderMsgs.forEach(async msg => {
-          if (!msg.isAdminMessage && !msg.read) {
-            msg.read = true;
-            await window.dataSdk.update(msg);
-          }
-        });
-      }
-      
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      chatWindow.classList.remove('hidden');
-      chatInput.focus();
-    }
-
-    function sendGlobalNotification() {
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4';
-      modal.innerHTML = `
-        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
-          <h3 class="text-2xl font-bold text-[#d4af37] mb-4">إرسال إشعار عام</h3>
-          <textarea id="notification-text" placeholder="اكتب رسالة الإشعار..." class="w-full px-4 py-3 rounded-lg bg-[#1a2942] border border-[#d4af37]/30 text-right text-white focus:outline-none focus:border-[#d4af37] transition placeholder-[#a0aec0] h-24 resize-none"></textarea>
-          <div class="flex gap-2 mt-4">
-            <button onclick="this.closest('div').parentElement.remove()" class="flex-1 py-2 rounded-lg bg-[#1a2942] border border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إلغاء</button>
-            <button onclick="sendNotificationToAll()" class="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">إرسال</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-      document.getElementById('notification-text').focus();
-    }
-
-    async function sendNotificationToAll() {
-      const text = document.getElementById('notification-text').value.trim();
-      if (!text) return;
-      
-      // Send to all users
-      if (window.dataSdk) {
-        await window.dataSdk.create({
-          senderId: 'admin',
-          senderName: 'الإدارة',
-          recipientId: 'all_users',
-          message: text,
-          timestamp: new Date().toISOString(),
-          isAdminMessage: true,
-          read: false
-        });
-      }
-      
-      const notificationDiv = document.createElement('div');
-      notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] rounded-lg p-4 shadow-xl flex items-center gap-3 animate-pulse';
-      notificationDiv.innerHTML = `
-        <span class="text-2xl">✓</span>
-        <div>
-          <p class="font-bold">تم إرسال الإشعار!</p>
-          <p class="text-sm">تم إرسال الإشعار لجميع المستخدمين</p>
-        </div>
-      `;
-      document.body.appendChild(notificationDiv);
-      setTimeout(() => notificationDiv.remove(), 3000);
-      
-      document.querySelector('[onclick*="sendNotificationToAll"]').closest('div').parentElement.remove();
-      updateAdminPanel();
-    }
-
-    function testAdhan() {
-      const notificationDiv = document.createElement('div');
-      notificationDiv.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
-      notificationDiv.innerHTML = `
-        <span class="text-2xl">📻</span>
-        <div>
-          <p class="font-bold">تجربة الأذان</p>
-          <p class="text-sm">صوت الأذان (وضع تجريبي)</p>
-        </div>
-      `;
-      document.body.appendChild(notificationDiv);
-      setTimeout(() => notificationDiv.remove(), 3000);
-    }
-
-    function openSystemSettings() {
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 overflow-auto';
-      modal.innerHTML = `
-        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
-          <h3 class="text-2xl font-bold text-[#d4af37] mb-6">إعدادات النظام</h3>
-          <div class="space-y-4 mb-6">
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" checked class="w-4 h-4">
-                <span class="text-[#a0aec0]">تفعيل الإشعارات</span>
-              </label>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" checked class="w-4 h-4">
-                <span class="text-[#a0aec0]">السماح بالتسجيل الجديد</span>
-              </label>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" checked class="w-4 h-4">
-                <span class="text-[#a0aec0]">تفعيل الدردشة</span>
-              </label>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm mb-2">نسخة النظام</p>
-              <p class="text-[#d4af37] font-bold">v1.0.0</p>
-            </div>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="this.closest('div').parentElement.remove()" class="flex-1 py-2 rounded-lg bg-[#1a2942] border border-[#d4af37]/50 text-[#d4af37] font-bold hover:bg-[#2a3952] transition">إغلاق</button>
-            <button onclick="saveSystemSettings(this)" class="flex-1 py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">حفظ</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-    }
-
-    function saveSystemSettings(btn) {
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 z-[9999] bg-gradient-to-r from-green-600 to-green-800 text-white rounded-lg p-4 shadow-xl flex items-center gap-3';
-      notification.innerHTML = `
-        <span class="text-2xl">✓</span>
-        <div>
-          <p class="font-bold">تم حفظ الإعدادات!</p>
-          <p class="text-sm">تم تحديث إعدادات النظام بنجاح</p>
-        </div>
-      `;
-      document.body.appendChild(notification);
-      setTimeout(() => notification.remove(), 3000);
-      btn.closest('div').parentElement.remove();
-    }
-
-    function generateReport() {
-      const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 overflow-auto';
-      modal.innerHTML = `
-        <div class="max-w-md w-full rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border-2 border-[#d4af37]/40 p-8">
-          <h3 class="text-2xl font-bold text-[#d4af37] mb-6">📊 تقرير الأنشطة</h3>
-          <div class="space-y-4 mb-6 max-h-64 overflow-auto">
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm">إجمالي الزيارات</p>
-              <p class="text-2xl font-bold text-[#d4af37]">${allMessages.length}</p>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm">الرسائل اليوم</p>
-              <p class="text-2xl font-bold text-[#d4af37]">${allMessages.filter(m => new Date(m.timestamp).toDateString() === new Date().toDateString()).length}</p>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm">الرسائل المقروءة</p>
-              <p class="text-2xl font-bold text-green-500">${allMessages.filter(m => m.read).length}</p>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm">الرسائل غير المقروءة</p>
-              <p class="text-2xl font-bold text-red-500">${allMessages.filter(m => !m.read).length}</p>
-            </div>
-            <div class="bg-[#0f172a]/60 rounded-lg p-4">
-              <p class="text-[#a0aec0] text-sm">آخر تحديث</p>
-              <p class="text-[#d4af37] font-bold text-sm">${new Date().toLocaleString('ar-SA')}</p>
-            </div>
-          </div>
-          <button onclick="this.closest('div').parentElement.remove()" class="w-full py-2 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#8b7355] text-[#0f172a] font-bold hover:shadow-lg transition">إغلاق</button>
-        </div>
-      `;
-      document.body.appendChild(modal);
-    }
-
-    function updateUnreadBadge() {
-      if (!currentUser || isAdminView) return;
-      
-      const unreadCount = allMessages.filter(m => 
-        m.recipientId === currentUser.email && !m.read && m.isAdminMessage
-      ).length;
-      
-      const badge = document.getElementById('unread-badge');
-      if (badge) {
-        if (unreadCount > 0) {
-          badge.classList.remove('hidden');
-          badge.textContent = unreadCount;
-        } else {
-          badge.classList.add('hidden');
-        }
-      }
-    }
-
-    // Modals
-    function openDuas() {
-      const container = document.getElementById('duas-container');
-      container.innerHTML = duas.map(dua => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 amiri text-2xl">${dua.title}</p><p class="text-[#a0aec0] text-lg">${dua.text}</p></div>`).join('');
-      document.getElementById('duas-modal').classList.remove('hidden');
-    }
-
-    function closeDuas() {
-      document.getElementById('duas-modal').classList.add('hidden');
-    }
-
-    function openNames() {
-      const grid = document.getElementById('names-grid');
-      grid.innerHTML = allahNames.map(name => `<div class="rounded-2xl bg-gradient-to-br from-[#1a2942] to-[#0d1b2a] border border-[#d4af37]/20 p-6 card-hover"><p class="text-3xl font-bold amiri text-[#d4af37] mb-3">${name.name}</p><p class="text-[#a0aec0] text-sm">${name.meaning}</p></div>`).join('');
-      document.getElementById('names-modal').classList.remove('hidden');
-    }
-
-    function closeNames() {
-      document.getElementById('names-modal').classList.add('hidden');
-    }
-
-    function openRamadan() {
-      const container = document.getElementById('ramadan-container');
-      container.innerHTML = ramadanInfo.map(item => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 text-2xl">${item.title}</p><p class="text-[#a0aec0] text-lg">${item.text}</p></div>`).join('');
-      document.getElementById('ramadan-modal').classList.remove('hidden');
-    }
-
-    function closeRamadan() {
-      document.getElementById('ramadan-modal').classList.add('hidden');
-    }
-
-    function openHadith() {
-      const container = document.getElementById('hadith-container');
-      container.innerHTML = hadithData.map(hadith => `<div class="rounded-xl bg-[#1a2942]/60 border border-[#d4af37]/20 p-6"><p class="text-[#d4af37] font-bold mb-3 text-2xl">${hadith.title}</p><p class="text-[#a0aec0] text-lg">${hadith.content}</p></div>`).join('');
-      document.getElementById('hadith-modal').classList.remove('hidden');
-    }
-
-    function closeHadith() {
-      document.getElementById('hadith-modal').classList.add('hidden');
-    }
-
-    // Data SDK Handler
-    const dataHandler = {
-      onDataChanged(data) {
-        if (data && data.length > 0) {
-          // Separate users from messages based on schema
-          const messages = data.filter(item => item.message);
-          const usersData = data.filter(item => item.email && !item.message);
-          
-          if (isAdminView) {
-            // Admin view: collect all messages
-            allMessages = messages;
-            updateAdminPanel();
-          } else {
-            // User view: find current user
-            const user = usersData.find(u => u.email === currentUser?.email);
-            if (user) {
-              userData = user;
-              const avatar = document.getElementById('profile-avatar-header');
-              if (avatar && user.profileImage) {
-                if (user.profileImage.startsWith('data:')) {
-                  avatar.innerHTML = `<img src="${user.profileImage}" class="w-full h-full object-cover rounded-full">`;
-                } else {
-                  avatar.textContent = user.profileImage;
-                }
-              }
-            }
-            // Also collect messages
-            allMessages = messages.filter(item => item.senderId === currentUser?.email || item.recipientId === currentUser?.email);
-            updateUnreadBadge();
-          }
-          loadChatMessages();
-        }
-      }
+    const defaultConfig = {
+      site_title: 'عبسي',
+      bio_text: 'مبدع أردني شغوف بالتكنولوجيا والابتكار، أسعى لترك بصمة إيجابية في العالم الرقمي'
     };
 
-    // Initialize
-    async function init() {
-      users = JSON.parse(localStorage.getItem('users') || '{}');
-      const saved = localStorage.getItem('currentUser');
+    function showPage(pageName) {
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
       
-      if (window.dataSdk) {
-        await window.dataSdk.init(dataHandler);
-      }
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
       
-      if (saved) {
-        currentUser = JSON.parse(saved);
-        const isAdmin = localStorage.getItem('isAdmin') === 'true' || currentUser.email === 'admin';
-        if (isAdmin) isAdminView = true;
-        showDashboard();
+      const targetSection = document.getElementById(`page-${pageName}`);
+      const targetNav = document.querySelector(`[data-page="${pageName}"]`);
+      
+      if (targetSection) {
+        targetSection.classList.add('active');
+        const content = targetSection.querySelector('.page-content');
+        if (content) content.scrollTop = 0;
       }
-
-      if (window.elementSdk) {
-        window.elementSdk.init({
-          defaultConfig: {},
-          onConfigChange: () => {},
-          mapToCapabilities: () => ({ recolorables: [], borderables: [], fontEditable: undefined, fontSizeable: undefined }),
-          mapToEditPanelValues: () => new Map()
-        });
+      if (targetNav) {
+        targetNav.classList.add('active');
       }
     }
 
-    init();
+    async function onConfigChange(config) {
+      const siteTitle = config.site_title || defaultConfig.site_title;
+      const bioText = config.bio_text || defaultConfig.bio_text;
+      
+      const navTitle = document.getElementById('nav-title');
+      const mainTitle = document.getElementById('main-title');
+      const bioElement = document.getElementById('bio-text');
+      
+      if (navTitle) navTitle.textContent = siteTitle;
+      if (mainTitle) mainTitle.textContent = siteTitle;
+      if (bioElement) bioElement.textContent = bioText;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_title', config.site_title || defaultConfig.site_title],
+        ['bio_text', config.bio_text || defaultConfig.bio_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
   </script>
-  <audio id="adhan-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c0a7f5d8f.mp3?filename=azan-114013.mp3"></audio>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dac965e303b5daa',t:'MTc3MzI1MzM3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9daec69217415daa',t:'MTc3MzI3NjMyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
